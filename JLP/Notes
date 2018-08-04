@@ -1,20 +1,9 @@
-Date format: They provided YYYY(WK) which I converted to 2018-01-01. You have to make an assumption about what day of the week to start on: I chose Monday
-
 Data structure:
   - 274 unique weeks going from 1/1/2013 - 2018 week 13
   - Within a week there are Layout Groups; 334 unique
-  - There are 341 unique Layout Group Names (more than Layout Groups)
-  - 14 Layout Groups have more than 1 Name:
-     - Layout Group 104 has Names 'TINNED LOAVES (CRUSTY)' and 'TINNED LOOSE BREAD (CRUSTY)'
-     - Layout Group 25 has Names'HEALTH DRINKS' and 'ACTIVE HEALTH DRINKS'
-       so those 2 are benign but then:
-     - 444 has 'IMPULSE CONSUMER ELECTRONICS' and 'LAUNDRY ACCESSORIES'
-     So we may want to remove 444 and similar from the analysis. There are about 5 of them
-
-  - Not all Layout Groups are present in all weeks, which is surprising
-     - minimum count of LG/Week is 223 with a max of 265
      
 Parking lot disruption:
-  the PDF (page 5) says it occurred week 26 (Jun 26) but I'm using week 24 (Jun 19). Close but worth discussing. No end date is mentioned; i used Jul 17 (week 28)
+  the PDF (page 5) says it occurred week 26; we are using week 24.
+  No end date is mentioned; we are using week 29...so 5 week duration
 
-I used May 27 (week 22) as the start of the new layout.
+There are 2 "waves" of layout changes. One set of stores starts week 1 and runs through week 15. The other, wave2, is weeks
