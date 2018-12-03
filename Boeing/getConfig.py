@@ -12,11 +12,14 @@ __author__ = "The Hackett Group"
 def getConfig():
 
     d = {}
-    d["dataLoc"]    = "/home/tbrownex/data/test/"
-    d["inputFile"]  = "sgemm_product.csv"
-    d["labelColumn"] = "MeanRunTime"
-    d["logLoc"]     = "/home/tbrownex/"
-    d["logFile"]    = "Boeing.log"
+    d["dataLoc"] = "/home/tbrownex/data/Hackett/Boeing/"
+    d["originalFile"] = "MD_Base_FC_versus_Act_2015-2018_R1updated_actuals.xlsx"
+    d["fileName"] = "final.csv"
+    d["labelColumn"] = "Actual"
+    d["logLoc"] = "/home/tbrownex/"
+    d["logFile"] = "Boeing.log"
     d["logDefault"] = "info"
-    d["testPct"]   = 0.25
+    d["testSize"] = 0.2
+    
+    d["Test"] = False
     return d

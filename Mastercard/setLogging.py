@@ -1,10 +1,12 @@
-''' Set the logging level for the process'''
-
 __author__ = "The Hackett Group"
 
 import logging
 
 def setLogging(config, args):
+    '''
+    Set the logging level for the process
+    '''
+
     # Validate the logging level
     if args.log:
         logLevel = getattr(logging, args.log.upper(), None)
