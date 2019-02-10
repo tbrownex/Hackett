@@ -3,7 +3,7 @@ import tensorflow as tf
 from sklearn.utils import shuffle
 import sys
 import time
-
+    
 def run(data, parms, jobName, config):
     '''data: dictionary holding Train and Validation sets'''
     feature_count = data['trainX'].shape[1]

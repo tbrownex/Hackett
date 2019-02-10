@@ -1,5 +1,6 @@
 ''' Get the command line arguments:
     Mandatory
+    - remOutliers: whether to remove outliers from Training
     - genFeature: whether to use a generated feature or not
     
     Optional arguments
@@ -12,7 +13,10 @@ import argparse
 
 def getArgs():
     parser = argparse.ArgumentParser()
-    parser.add_argument("genFeature", \
+    '''parser.add_argument("genFeature", \
                         choices=['Y','N'], \
-                        help="Use the moving standard deviation or not")
+                        help="Use the moving standard deviation or not")'''
+    parser.add_argument("-O", "--Outliers", \
+                        choices=['Y','N'], \
+                        help="Remove outliers or not; Y to remove")
     return parser.parse_args()

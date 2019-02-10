@@ -3,15 +3,17 @@ import pandas as pd
 
 def normalize(dataDict, method):
     '''
+    dataDict is a dictionary of dataframes with keys trainX, trainY, testX, testY
     Normalize the input, which should mean the sensor readings, cycle and any features generated from
     the sensor readings.
     Do not normalize the RUL or Unit
+    Normalize Train then, using mean and variance from Train, normalize Test
     '''
     assert method in ['MinMaxA','MinMaxB', 'Std', 'tanh'],  "Invalid scaling method"
     
     if method =='MinMaxA':
-        min_max_scaler = MinMaxScaler()
-        data           = pd.DataFrame(min_max_scaler.fit_transform(dataDict))
+        scaler = MinMaxScaler()
+        data   = pd.DataFrame(min_max_scaler.fit_transform(dataDict))
         data.columns   = sv_cols
         scale_range    = min_max_scaler.data_range_[-1]
         scale_min      = min_max_scaler.data_min_[-1]
@@ -26,13 +28,15 @@ def normalize(dataDict, method):
     elif method == 'Std':
         # StandardScaler returns a numpy array so need to recreate the DF
         cols = dataDict["trainX"].columns
-        npArray            = StandardScaler().fit_transform(dataDict["trainX"])
-        dataDict["trainX"] = pd.DataFrame(npArray, columns=cols)
+        scaler = StandardScaler()
+        scaler.fit(dataDict["trainX"])
+        train = scaler.transform(dataDict["trainX"])
+        dataDict["trainX"] = pd.DataFrame(train, columns=cols)
         # Test has the Unit as a column which needs to be removed (not normalized) then added back
         svUnits = dataDict["testX"]["unit"]
         del dataDict["testX"]["unit"]
-        npArray            = StandardScaler().fit_transform(dataDict["testX"])
-        dataDict["testX"]  = pd.DataFrame(npArray, columns=cols)
+        test = scaler.transform(dataDict["testX"])
+        dataDict["testX"] = pd.DataFrame(test, columns=cols)
         dataDict["testX"]["unit"] = svUnits
         return dataDict
     else:

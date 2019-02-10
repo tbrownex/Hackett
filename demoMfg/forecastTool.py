@@ -19,30 +19,29 @@
     
 __author__ = "Tom Browne"
 
-#from getArgs    import getArgs
-from getConfig  import getConfig
-from getData    import getData
 import pandas as pd
 import numpy as np
+import warnings
+from sklearn.exceptions import DataConversionWarning
+warnings.filterwarnings(action='ignore', category=DataConversionWarning)
+
+from getArgs    import getArgs
+from getConfig  import getConfig
+from getData    import getData
 from setLogging import setLogging
 from selectSet import selectSet
 from getSet import getSet
 import logging
-import prepData
+from preProcess import preProcess
 import forecast
-import evaluate
 import jobNumber
-import time
+from evaluate import evaluate
 
-def process(train, test, config):
+def process(dataDict, config):
     '''
-    - Prep the data (split features from labels)
     - Get the predictions from each model
     - Evaluate the predictions (calculate error)
-    
-    dataDict has keys for trainX, trainY and testX, testY
     '''
-    dataDict = prepData.process(train, test, config)
     predictions = forecast.process(dataDict, config)
     '''
     "evaluate" module expects a dataframe with:
@@ -55,16 +54,15 @@ def process(train, test, config):
     predDF["actual"] = dataDict["testY"]
     predDF.to_csv("/home/tbrownex/predDF.csv", index=False)
     predDF.set_index("unit", inplace=True)
-    return evaluate.process(predDF)
+    return evaluate(predDF, config["evaluationMethod"])
 
-def finishUp(start, mape, rmse, job):
+def finishUp(mape, rmse, job):
     '''
     - Print the run time and error metrics
     - Update the log
     - Update the Job number
     '''
-    elapsed = (time.time() - start)/60
-    rec = "Ended run " +job+ " after " +str(round(elapsed,1)) + " minutes with MAPE " +\
+    rec = "\nEnded run " +job+ " with MAPE " +\
     str(round(mape, 3)) + " and RMSE " + str(round(rmse,2))
     logging.info(rec)
     print(rec)
@@ -79,7 +77,7 @@ if __name__ == "__main__":
     - Load Train and Test dataframes with user-specified dataset
     - Kick off processing
     '''
-    #args     = getArgs()
+    args   = getArgs()
     config = getConfig()
     # Do some initialization
     job = jobNumber.getJob()
@@ -87,7 +85,6 @@ if __name__ == "__main__":
     rec = "Start of run " + job
     logging.info(rec)
     
-    start = time.time()
     # Which dataset should we work with?
     Set = selectSet()
 
@@ -95,6 +92,8 @@ if __name__ == "__main__":
     train = getSet(train, Set)
     test = getSet(test, Set)
     
-    mape, rmse = process(train, test, config)
+    dataDict   = preProcess(train, test, config, args)
+    mape, rmse = process(dataDict, config)
     
-    finishUp(start, mape, rmse, job)
+    print("\nLearing Rate: ", config["evaluationMethod"])
+    finishUp(mape, rmse, job)

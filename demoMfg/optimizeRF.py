@@ -1,7 +1,7 @@
 import pandas as pd
-import numpy as np
+import numpy  as np
 import time
-import xgboost as xgb
+from sklearn.ensemble import RandomForestRegressor
 import pickle
 import warnings
 from sklearn.exceptions import DataConversionWarning
@@ -17,14 +17,14 @@ from getArgs import getArgs
 from evaluate import evaluate
 
 def saveModel(model, count):
-    fname = "XGBmodel_" + str(count)
+    fname = "RFmodel_" + str(count)
     pickle.dump(model, open(config["modelDir"] + fname, 'wb'))
 
 # This file stores the results for each set of parameters so you can review a series
 # of runs later
 def writeResults(results):
     delim = ","
-    with open("/home/tbrownex/XGBscores.csv", 'w') as summary:
+    with open("/home/tbrownex/RFscores.csv", 'w') as summary:
         hdr = "trees"+delim+"nodeSize"+delim+"depth"+delim+"leafSize"+delim+"features"+\
         delim+"MAPE"+delim+"RMSE"+"\n"
         summary.write(hdr)
@@ -54,21 +54,18 @@ def process(dataDict, parms, config):
     count = 1
     
     for x in parms:
-        params = {'n_estimators': x[0], 'max_depth': x[1], 'min_samples_split': 2,
-                  'learning_rate': x[2], 'loss': 'ls'}
-        
-        tree = xgb.XGBRegressor(booster="gbtree",
-                                n_estimators=100,
-                                max_depth=5,
-                                gamma=1e-2,
-                                learning_rate=1e-3,
-                                min_child_weight=1e-2,
-                                subsample=0.8,
-                               reg_lambda=1e-2)
-        tree.fit(dataDict["trainX"], dataDict["trainY"])
-        preds = tree.predict(dataDict["testX"])
-        print(preds.shape)
-        input()
+        trees     = x[0]
+        nodeSize  = x[1]
+        depth     = x[2]
+        leafSize  = x[3]
+        features  = x[4]
+        regr = RandomForestRegressor(n_estimators = trees,\
+                                     min_samples_split = nodeSize,\
+                                     max_depth = depth,\
+                                     min_samples_leaf = leafSize,\
+                                     max_features = features)
+        rf    = regr.fit(dataDict["trainX"], dataDict["trainY"])
+        preds = rf.predict(dataDict["testX"])
         df    = formatPreds(dataDict, svUnits, preds)
         #df.to_csv("/home/tbrownex/df.csv")
         mape, rmse = evaluate(df, config["evaluationMethod"])
@@ -79,7 +76,7 @@ def process(dataDict, parms, config):
         print("Done with {} of {}".format(count, len(parms)))
         count += 1
     return results
-
+    
 if __name__ == "__main__":
     args   = getArgs()
     config = getConfig()
@@ -92,7 +89,7 @@ if __name__ == "__main__":
     
     dataDict    = preProcess(train, test, config, args)
     
-    parms = getParms("XGB")
+    parms = getParms("RF")
     
     start_time = time.time()
     

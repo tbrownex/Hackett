@@ -10,13 +10,13 @@
 __author__ = "The Hackett Group"
 
 def getConfig():
-
     d = {}
     d["dataLoc"]    = "/home/tbrownex/data/CMAPSS/"
     d["fileName"]  = "training.csv"
     d["testFile"]  = "testing.csv"
     d["modelDir"]  = "/home/tbrownex/repos/Hackett/demoMfg/models"
     d["labelColumn"] = "RUL"
+    d["evaluationMethod"] = "LR"
     d["logLoc"]     = "/home/tbrownex/"
     d["logFile"]    = "demoMfg.log"
     d["logDefault"] = "info"
