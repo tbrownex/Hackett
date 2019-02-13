@@ -2,12 +2,11 @@ import numpy as np
 from calcMAPE import calcMAPE
 from calcRMSE import calcRMSE
 from sklearn import linear_model
-
-def evaluate(predictions, typ):
-    '''
+'''
     Calculate the MAPE and RMSE of predictions vs actuals from the Test data.
     "predictions" is a dataframe with "unit" as the index. Columns are:
-        - first few columns are the predictions from the different algos
+        - first column is the Baseline pred and is treated different from the other, algo-based predictions
+        - next few columns are the predictions from the different algos
         - last column holds the actuals
         
     "Unit" is indexed so we process the data a Unit at a time. That's how this would run in Production: you
@@ -23,8 +22,24 @@ def evaluate(predictions, typ):
     So it draws a straight line through these volatile predictions. Once you have that data regressed,
     use the last (most recent) value for your "official" prediction.
     '''
-    # The predictions are a bit erratic from cycle to cycle. Smooth them out by performing
-    # Linear Re
+    
+def getBaseline(predictions):
+    errors = {}
+    actuals = []
+    preds   = []           
+    grp = predictions.groupby(level=0)
+    for unit, data in grp:
+        data = data.tail(1)                # get the last row
+        preds.append(data["Baseline"].iloc[0])
+        actuals.append(data["actual"].iloc[0])
+    actuals = np.array(actuals)
+    preds   = np.array(preds)
+    errors["mape"] = calcMAPE(actuals, preds)
+    errors["rmse"] = calcRMSE(actuals, preds)
+    return errors
+
+def getEnsemble(predictions, typ):
+    errors = {}
     actuals = []
     preds   = []
     
@@ -39,6 +54,7 @@ def evaluate(predictions, typ):
         data = data.tail(10)                # get the last 10 rows for the Regression data
         actuals.append(data["actual"].iloc[-1])
         del data["actual"]                    # Don't include the actual in the ensemble of predictions
+        del data["Baseline"]                  # Don't want the Baseline included either
         ensemble = data.mean(axis=1)          # axis=1 gets the mean across rows of different algos
         if typ == "LR":
             ensemble = ensemble.values.reshape([-1,1])
@@ -49,7 +65,12 @@ def evaluate(predictions, typ):
             preds.append(ensemble.iloc[-1])
     actuals = np.array(actuals)
     preds   = np.array(preds)
-    mape = calcMAPE(actuals, preds)
-    rmse = calcRMSE(actuals, preds)
-    
-    return mape, rmse
+    errors["mape"] = calcMAPE(actuals, preds)
+    errors["rmse"] = calcRMSE(actuals, preds)
+    return errors
+
+def evaluate(predictions, typ):
+    errors = {}
+    errors["baseline"] = getBaseline(predictions)
+    errors["ensemble"] = getEnsemble(predictions, typ)
+    return errors

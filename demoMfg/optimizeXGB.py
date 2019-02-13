@@ -1,3 +1,8 @@
+from numpy.random import seed
+seed(12)
+from tensorflow import set_random_seed
+set_random_seed(12)
+
 import pandas as pd
 import numpy as np
 import time
@@ -25,13 +30,14 @@ def saveModel(model, count):
 def writeResults(results):
     delim = ","
     with open("/home/tbrownex/XGBscores.csv", 'w') as summary:
-        hdr = "trees"+delim+"nodeSize"+delim+"depth"+delim+"leafSize"+delim+"features"+\
-        delim+"MAPE"+delim+"RMSE"+"\n"
+        hdr = "trees"+delim+"learningRate"+delim+"depth"+delim+"minChildWeight"+\
+        delim+"colSampleTree"+delim+"subSample"+delim+"gamma"+delim+"MAPE"+delim+"RMSE"+"\n"
         summary.write(hdr)
         
         for x in results:
             rec = str(x[0][0])+delim+str(x[0][1])+delim+str(x[0][2])+\
-            delim+str(x[0][3])+delim+str(x[0][4])+delim+str(x[1])+delim+str(x[2])+"\n"
+            delim+str(x[0][3])+delim+str(x[0][4])+delim+str(x[0][5])+delim+str(x[0][6])\
+            +delim+str(x[1])+delim+str(x[2])+"\n"
             summary.write(rec)
 
 def formatPreds(dataDict, svUnits, preds):
@@ -54,28 +60,25 @@ def process(dataDict, parms, config):
     count = 1
     
     for x in parms:
-        params = {'n_estimators': x[0], 'max_depth': x[1], 'min_samples_split': 2,
-                  'learning_rate': x[2], 'loss': 'ls'}
+        params = {"booster": "gbtree",\
+                  'n_estimators': x[0],\
+                  'learning_rate': x[1],\
+                  'max_depth': x[2],\
+                  "min_child_weight": x[3],\
+                  "colsample_bytree": x[4],\
+                  "subsample": x[5],\
+                  'loss': 'ls',\
+                  "gamma": x[6]}
         
-        tree = xgb.XGBRegressor(booster="gbtree",
-                                n_estimators=100,
-                                max_depth=5,
-                                gamma=1e-2,
-                                learning_rate=1e-3,
-                                min_child_weight=1e-2,
-                                subsample=0.8,
-                               reg_lambda=1e-2)
-        tree.fit(dataDict["trainX"], dataDict["trainY"])
-        preds = tree.predict(dataDict["testX"])
-        print(preds.shape)
-        input()
+        regr = xgb.XGBRegressor(**params)
+        regr.fit(dataDict["trainX"], dataDict["trainY"])
+        preds = regr.predict(dataDict["testX"])
         df    = formatPreds(dataDict, svUnits, preds)
-        #df.to_csv("/home/tbrownex/df.csv")
         mape, rmse = evaluate(df, config["evaluationMethod"])
         print("{}{:<8.2f}{}{:.2f}".format("mape ", mape, "rmse: ", rmse))
         tup = (x, mape, rmse)
         results.append(tup)
-        #saveModel(rf, count)
+        saveModel(regr, count)
         print("Done with {} of {}".format(count, len(parms)))
         count += 1
     return results

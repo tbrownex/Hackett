@@ -16,7 +16,7 @@ def getConfig():
     d["testFile"]  = "testing.csv"
     d["modelDir"]  = "/home/tbrownex/repos/Hackett/demoMfg/models"
     d["labelColumn"] = "RUL"
-    d["evaluationMethod"] = "LR"
+    d["evaluationMethod"] = "--"
     d["logLoc"]     = "/home/tbrownex/"
     d["logFile"]    = "demoMfg.log"
     d["logDefault"] = "info"

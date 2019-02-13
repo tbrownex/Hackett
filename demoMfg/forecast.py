@@ -1,25 +1,49 @@
-''' Create an ensemble forecast based on several different algorithms '''
+'''
+Get predictions against the test set for each algo and also a Baseline prediction.
+Baseline prediction uses the mean time to fail over the Training data.
 
+Return a dataframe with a column for:
+    - Baseline first
+    - each algo
+    
+So the shape of the dataframe will be [number of test cases, number of algos + 1]
+'''
 __author__ = "Tom Browne"
 
-import numpy as np
+import numpy  as np
+import pandas as pd
 import logging
-from getRFpreds import getRFpreds
-from getNNpreds import getNNpreds
-#from getXGBparms import getXGBparms
-#import getXGBpreds
+from getBaselinePreds  import getBaselinePreds
+from getRFpreds  import getRFpreds
+from getNNpreds  import getNNpreds
+from getXGBpreds import getXGBpreds
+
+def formatPredictions(predictions, cols):
+    df = pd.DataFrame(predictions)
+    df.columns = cols
+    return df
 
 def process(dataDict, config):
-    '''
-    Get predictions against the test set for each algo.
-    The shape of "predictions" that is returned is [number of test cases (rows), number of algos]
-    '''
-    # Random Forest first
-    predictions = getRFpreds(dataDict, config)
+    cols = []
+    # Baseline first
+    predictions = getBaselinePreds(dataDict)
+    cols.append("Baseline")
+    
+    # Random Forest
+    preds = getRFpreds(dataDict, config)
+    predictions = np.append(predictions, preds, axis=1)
+    cols.append("RF")
     
     # Neural Network
-    NNpreds     = getNNpreds(dataDict, config)
-    predictions = np.append(predictions, NNpreds, axis=1)
+    preds     = getNNpreds(dataDict, config)
+    predictions = np.append(predictions, preds, axis=1)
+    cols.append("NN")
         
-    # Now XGB
+    # XGBoost
+    preds       = getXGBpreds(dataDict, config)
+    predictions = np.append(predictions, preds, axis=1)
+    cols.append("XGB")
+    
+    predictions = formatPredictions(predictions, cols)
+    
     return predictions

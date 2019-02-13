@@ -54,25 +54,20 @@ def process(dataDict, parms, config):
     count = 1
     
     for x in parms:
-        trees     = x[0]
-        nodeSize  = x[1]
-        depth     = x[2]
-        leafSize  = x[3]
-        features  = x[4]
-        regr = RandomForestRegressor(n_estimators = trees,\
-                                     min_samples_split = nodeSize,\
-                                     max_depth = depth,\
-                                     min_samples_leaf = leafSize,\
-                                     max_features = features)
-        rf    = regr.fit(dataDict["trainX"], dataDict["trainY"])
-        preds = rf.predict(dataDict["testX"])
+        params = {'n_estimators': x[0],\
+                  'min_samples_split': x[1],\
+                  'max_depth': x[2],\
+                  "min_samples_leaf": x[3],\
+                  "max_features": x[4]}
+        regr  = RandomForestRegressor(**params)
+        regr.fit(dataDict["trainX"], dataDict["trainY"])
+        preds = regr.predict(dataDict["testX"])
         df    = formatPreds(dataDict, svUnits, preds)
-        #df.to_csv("/home/tbrownex/df.csv")
         mape, rmse = evaluate(df, config["evaluationMethod"])
         print("{}{:<8.2f}{}{:.2f}".format("mape ", mape, "rmse: ", rmse))
         tup = (x, mape, rmse)
         results.append(tup)
-        #saveModel(rf, count)
+        saveModel(regr, count)
         print("Done with {} of {}".format(count, len(parms)))
         count += 1
     return results

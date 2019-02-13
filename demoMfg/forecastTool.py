@@ -24,6 +24,7 @@ import numpy as np
 import warnings
 from sklearn.exceptions import DataConversionWarning
 warnings.filterwarnings(action='ignore', category=DataConversionWarning)
+warnings.filterwarnings('ignore')
 
 from getArgs    import getArgs
 from getConfig  import getConfig
@@ -42,32 +43,22 @@ def process(dataDict, config):
     - Get the predictions from each model
     - Evaluate the predictions (calculate error)
     '''
-    predictions = forecast.process(dataDict, config)
-    '''
-    "evaluate" module expects a dataframe with:
-    - Unit
-    - A column for each algo's predictions
-    - Actual RUL
-    '''
-    predDF = pd.DataFrame(predictions)
+    predDF = forecast.process(dataDict, config)
+    # Add the unit and actuals
     predDF["unit"]   = dataDict["testX"]["unit"]
     predDF["actual"] = dataDict["testY"]
     predDF.to_csv("/home/tbrownex/predDF.csv", index=False)
     predDF.set_index("unit", inplace=True)
     return evaluate(predDF, config["evaluationMethod"])
 
-def finishUp(mape, rmse, job):
+def finishUp(errors, job):
     '''
     - Print the run time and error metrics
     - Update the log
     - Update the Job number
     '''
-    rec = "\nEnded run " +job+ " with MAPE " +\
-    str(round(mape, 3)) + " and RMSE " + str(round(rmse,2))
-    logging.info(rec)
-    print(rec)
-    
-    jobNumber.setJob(int(job) + 1)
+    for k in errors.keys():
+        print(k, ": ", errors[k])
 
 if __name__ == "__main__":
     '''
@@ -92,8 +83,8 @@ if __name__ == "__main__":
     train = getSet(train, Set)
     test = getSet(test, Set)
     
-    dataDict   = preProcess(train, test, config, args)
-    mape, rmse = process(dataDict, config)
+    dataDict = preProcess(train, test, config, args)
+    errors   = process(dataDict, config)
     
     print("\nLearing Rate: ", config["evaluationMethod"])
-    finishUp(mape, rmse, job)
+    finishUp(errors, job)

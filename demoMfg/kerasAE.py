@@ -10,13 +10,10 @@ from sklearn.exceptions import DataConversionWarning
 warnings.filterwarnings(action='ignore', category=DataConversionWarning)
 
 from evaluate import evaluate
+from calcRMSE import calcRMSE
+from calcMAPE import calcMAPE
 
-# TODO:
-#    add Cross Validation
-#    add Early Stopping
-#    view Feature Importance
-
-def buildLayers(parmDict):
+def buildLayers(parmDict, featureCount):
     Dense   = partial(keras.layers.Dense)
     Dropout = partial(keras.layers.Dropout)
     
@@ -25,11 +22,15 @@ def buildLayers(parmDict):
                  kernel_initializer=keras.initializers.TruncatedNormal(mean=0.0, stddev=parmDict["std"]),\
                                                                        activation=parmDict["activation"]))
     nn.add(Dropout(parmDict["dropout"]))
-    nn.add(Dense(1, activation="linear"))
+    nn.add(Dense(parmDict["l2Size"],\
+                 kernel_initializer=keras.initializers.TruncatedNormal(mean=0.0, stddev=parmDict["std"]),\
+                                                                       activation=parmDict["activation"]))
+    nn.add(Dropout(parmDict["dropout"]))
+    nn.add(Dense(featureCount, activation="linear"))
     return nn
 
-def buildNetwork(parmDict):
-    nn = buildLayers(parmDict)
+def buildNetwork(parmDict, featureCount):
+    nn = buildLayers(parmDict, featureCount)
     if parmDict["optimizer"] == "SGD":
         opt  = tf.keras.optimizers.SGD(lr=parmDict["lr"],\
                                        decay=1e-6,\
@@ -46,14 +47,10 @@ def buildNetwork(parmDict):
     return nn
 
 def fitNetwork(dataDict, parmDict, nn, config):
-    TB        = keras.callbacks.TensorBoard(log_dir=config["TBdir"])
-    '''modelSave = keras.callbacks.ModelCheckpoint(config["modelDir"],
-                                                save_weights_only=True,
-                                                verbose=1)'''
+    TB = keras.callbacks.TensorBoard(log_dir=config["TBdir"])
     
     X = np.array(dataDict["trainX"])
-    Y = np.array(dataDict["trainY"])
-    nn.fit(X, Y,\
+    nn.fit(X, X,\
            batch_size=parmDict["batchSize"],\
            epochs=40,\
            validation_split=0.15,\
@@ -61,20 +58,20 @@ def fitNetwork(dataDict, parmDict, nn, config):
            shuffle=False,
            callbacks=[TB])
 
-def formatPreds(dataDict, svUnits, preds):
-    ''' Prepare the data to be evaluated '''
-    d = {}
-    d["actual"] = dataDict["testY"]
-    d["pred"]   = np.reshape(preds, [-1,])
-    d["unit"]   = svUnits
-    df = pd.DataFrame(d)
-    df.set_index("unit", inplace=True)
-    return df
+def scoreNetwork(df, nn):
+    data  = np.array(df)
+    preds = nn.predict(x=data)
+    rmse  = calcRMSE(df, preds)
+    mape  = calcMAPE(df, preds)
+    # rmse is a series: one value for each column. Return the avg across all columns
+    return mape.mean(), rmse.mean()
 
-def runNN(dataDict, parmDict, svUnits, config):    
+def runNN(dataDict, parmDict, config):    
     '''data: dictionary holding Train, Validation and Test sets'''
-    nn = buildNetwork(parmDict)
+    featureCount = dataDict["trainX"].shape[1]
+    
+    nn = buildNetwork(parmDict, featureCount)
     fitNetwork(dataDict, parmDict, nn, config)
-    tf.keras.models.save_model(model=nn, filepath=config["modelDir"]+"NNmodel.h5")
-    preds = nn.predict(dataDict["testX"])
-    return preds
+    tf.keras.models.save_model(model=nn, filepath=config["modelDir"]+"AEmodel.h5")
+    scores = scoreNetwork(dataDict["testX"], nn)
+    return scores

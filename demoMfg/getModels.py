@@ -10,5 +10,7 @@ def getModels(typ, config):
         m = config["modelDir"]+"RFmodel*"
     elif typ == "NN":
         m = config["modelDir"]+"NN*"
+    elif typ == "XGB":
+        m = config["modelDir"]+"XGB*"
     
     return glob.glob(m)

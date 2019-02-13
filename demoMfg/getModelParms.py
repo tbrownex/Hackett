@@ -14,13 +14,13 @@ def getParms(typ):
                                       min_samples_leaf,
                                       max_features))
     elif typ == "XGB":
-        nEstimators      = [100]
-        learningRate     = [1e-2, 1e-3]
-        maxDepth         = [6]
-        min_child_weight = [10]
-        colsample_bytree = [0.8]
-        subsampling      = [0.8]
-        gamma            = [0]
+        nEstimators       = [100]
+        learningRate      = [2e-2]
+        maxDepth          = [5]
+        min_child_weight  = [8]
+        colsample_bytree  = [0.55]
+        subsampling       = [1.0]
+        gamma             = [0]
         return list(itertools.product(nEstimators,
                                       learningRate,
                                       maxDepth,
@@ -36,10 +36,27 @@ def getParms(typ):
         std          = [0.25]
         dropout      = [0.4]
         optimizer    = ["Adam"]
-    return list(itertools.product(L1Size,
-                                  activation,
-                                  batchSize,
-                                  learningRate,
-                                  std,
-                                  dropout,
-                                  optimizer))
+        return list(itertools.product(L1Size,
+                                      activation,
+                                      batchSize,
+                                      learningRate,
+                                      std,
+                                      dropout,
+                                      optimizer))
+    elif typ == "AE":     # AutoEncoder for outlier detection
+        L1Size       = [18]
+        L2Size       = [12]
+        activation   = ["tanh"]
+        batchSize    = [32]
+        learningRate = [2e-3]
+        std          = [0.5]
+        dropout      = [0.4]
+        optimizer    = ["Adam"]
+        return list(itertools.product(L1Size,
+                                      L2Size,
+                                      activation,
+                                      batchSize,
+                                      learningRate,
+                                      std,
+                                      dropout,
+                                      optimizer))
