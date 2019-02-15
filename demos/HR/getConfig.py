@@ -11,16 +11,16 @@ __author__ = "The Hackett Group"
 
 def getConfig():
     d = {}
-    d["dataLoc"]    = "/home/tbrownex/data/CMAPSS/"
-    d["fileName"]  = "training.csv"
-    d["testFile"]  = "testing.csv"
-    d["modelDir"]  = "/home/tbrownex/repos/Hackett/demoMfg/models"
-    d["labelColumn"] = "RUL"
+    d["dataLoc"]     = "/home/tbrownex/data/Hackett/demos/HR/"
+    d["fileName"]    = "rawData.csv"
+    d["labelColumn"] = "Score"
     d["evaluationMethod"] = "--"
     d["logLoc"]     = "/home/tbrownex/"
-    d["logFile"]    = "demoMfg.log"
+    d["logFile"]    = "demoHR.log"
     d["logDefault"] = "info"
-    d["testPct"]   = 0.     # There is a separate file with Test data
-    d["TBdir"] = '/home/tbrownex/TF/TensorBoard'         # where to store Tensorboard data
-    d["modelDir"] = "/home/tbrownex/repos/Hackett/demoMfg/models/"  # where to save models
+    d["valPct"]     = 0.
+    d["testPct"]    = 0.2
+    d["TBdir"]      = '/home/tbrownex/TF/TensorBoard'         # where to store Tensorboard data
+    d["modelDir"]   = "/home/tbrownex/repos/Hackett/demos/HR/models"
+    d["labelType"]  = "continuous"   # either "continous" or "categorical"
     return d
