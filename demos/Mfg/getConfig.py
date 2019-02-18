@@ -18,5 +18,5 @@ def getConfig():
     d["logDefault"] = "info"
     d["testPct"]   = 0.     # There is a separate file with Test data
     d["TBdir"] = '/home/tbrownex/TF/TensorBoard'         # where to store Tensorboard data
-    d["modelDir"] = "/home/tbrownex/repos/Hackett/demoMfg/models/"  # where to save models
+    d["modelDir"] = "/home/tbrownex/repos/Hackett/demos/Mfg/models/"  # where to save models
     return d

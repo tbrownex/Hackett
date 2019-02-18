@@ -77,4 +77,5 @@ def runNN(dataDict, parmDict, svUnits, config):
     fitNetwork(dataDict, parmDict, nn, config)
     tf.keras.models.save_model(model=nn, filepath=config["modelDir"]+"NNmodel.h5")
     preds = nn.predict(dataDict["testX"])
+    preds = np.reshape(preds, newshape=[-1,])
     return preds

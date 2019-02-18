@@ -49,16 +49,14 @@ def process(dataDict, config):
     predDF["actual"] = dataDict["testY"]
     predDF.to_csv("/home/tbrownex/predDF.csv", index=False)
     predDF.set_index("unit", inplace=True)
-    return evaluate(predDF, config["evaluationMethod"])
+    return evaluate(predDF, ensemble=True)
 
 def finishUp(errors, job):
-    '''
-    - Print the run time and error metrics
-    - Update the log
-    - Update the Job number
-    '''
-    for k in errors.keys():
-        print(k, ": ", errors[k])
+    results = [(k, errors[k]["mape"], errors[k]["rmse"]) for k in errors.keys()]
+    print("{:<20}{:<8}{}".format("Forecast Method", "MAPE", "RMSE"))
+    sortRMSE = sorted(results, key=lambda tup: tup[2])
+    for x in sortRMSE:
+        print("{:<20}{:<8.1%}{:.2f}".format(x[0], x[1], x[2]))
 
 if __name__ == "__main__":
     '''
@@ -86,5 +84,5 @@ if __name__ == "__main__":
     dataDict = preProcess(train, test, config, args)
     errors   = process(dataDict, config)
     
-    print("\nLearing Rate: ", config["evaluationMethod"])
+    #print("\nCost method: ", config["evaluationMethod"])
     finishUp(errors, job)

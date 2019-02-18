@@ -18,32 +18,26 @@ from getRFpreds  import getRFpreds
 from getNNpreds  import getNNpreds
 from getXGBpreds import getXGBpreds
 
-def formatPredictions(predictions, cols):
-    df = pd.DataFrame(predictions)
-    df.columns = cols
-    return df
-
 def process(dataDict, config):
-    cols = []
+    predDF = pd.DataFrame()
     # Baseline first
-    predictions = getBaselinePreds(dataDict)
-    cols.append("Baseline")
+    preds              = getBaselinePreds(dataDict)
+    preds              = np.reshape(preds, newshape=[-1,])
+    predDF["Baseline"] = preds
     
     # Random Forest
-    preds = getRFpreds(dataDict, config)
-    predictions = np.append(predictions, preds, axis=1)
-    cols.append("RF")
+    preds        = getRFpreds(dataDict, config)
+    preds        = np.reshape(preds, newshape=[-1,])
+    predDF["RF"] = preds
     
     # Neural Network
-    preds     = getNNpreds(dataDict, config)
-    predictions = np.append(predictions, preds, axis=1)
-    cols.append("NN")
-        
+    preds        = getNNpreds(dataDict, config)
+    preds        = np.reshape(preds, newshape=[-1,])
+    predDF["NN"] = preds
+    
     # XGBoost
-    preds       = getXGBpreds(dataDict, config)
-    predictions = np.append(predictions, preds, axis=1)
-    cols.append("XGB")
+    preds         = getXGBpreds(dataDict, config)
+    preds         = np.reshape(preds, newshape=[-1,])
+    predDF["XGB"] = preds
     
-    predictions = formatPredictions(predictions, cols)
-    
-    return predictions
+    return predDF

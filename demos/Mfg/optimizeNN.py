@@ -22,7 +22,7 @@ import jobNumber as job
 from selectSet import selectSet
 from getSet import getSet
 from normalizeData import normalize
-from getBaselinePreds import getBaselinePreds    
+from evaluate import evaluate
 
 def createVal(d):
     # Split Training into Train and Val. They are already shuffled so just take bottom 20% for Val
@@ -50,11 +50,11 @@ def writeResults(results):
             delim+str(x[0][6])+delim+str(x[1])+delim+str(x[2])+"\n"
             summary.write(rec)
 
-def formatPreds(dataDict, svUnits, preds, baseline):
+def formatPreds(dataDict, svUnits, preds):
     ''' Prepare the data to be evaluated '''
     d = {}
     d["actual"] = dataDict["testY"]
-    d["pred"]   = np.reshape(preds, [-1,])
+    d["NN"]     = preds
     d["unit"]   = svUnits
     df = pd.DataFrame(d)
     df.set_index("unit", inplace=True)
@@ -74,8 +74,6 @@ if __name__ == "__main__":
     dataDict    = preProcess(train, test, config, args)
     dataDict    = createVal(dataDict)
     
-    baseline    = getBaselinePreds(dataDict)
-    
     # Remove Unit since its not a feature but save it so you can recreate
     # the Predictions vs Actuals by Unit
     svUnits = dataDict["testX"]["unit"]
@@ -88,7 +86,7 @@ if __name__ == "__main__":
     
     start_time = time.time()
     print("\n{} parameter combinations".format(len(parms)))
-    print("\n{:<6}{:<10}{}".format("Count", "MAPE","RMSE"))
+    print("\n{:<10}{:<10}{}".format("Count", "MAPE","RMSE"))
     
     for x in parms:
         parmDict = {}                  # holds the hyperparameter combination for one run
@@ -101,18 +99,17 @@ if __name__ == "__main__":
         parmDict['optimizer']   = x[6]
         
         preds = runNN(dataDict, parmDict, svUnits, config)
+        df    = formatPreds(dataDict, svUnits, preds)
         
-        preds = np.append(predictions, preds, axis=1)
-        df    = formatPreds(dataDict, svUnits, preds, baseline)
-        errors = evaluate(df, config["evaluationMethod"])
-        print(errors)
-        input()
-        
-        print("{:<6}{:<8.2f}{:.2f}".format(count, errors["ensemble"]))
+        errors = evaluate(df, ensemble=False)
+        mape = errors["NN"]["mape"]
+        rmse = errors["NN"]["rmse"]
+        print("{:<10}{:<10.1%}{:.2f}".format(count, mape, rmse))
         tup = (x, mape, rmse)
         results.append(tup)
+        
         count +=1
             
     # Write out a summary of the results
     writeResults(results)
-    print("Job {} complete after {:,.0f} minutes".format(str(jobId), (time.time() -start_time)/60))
+    print("\nJob {} complete after {:,.0f} minutes".format(str(jobId), (time.time() -start_time)/60))

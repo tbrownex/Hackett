@@ -44,7 +44,7 @@ def formatPreds(dataDict, svUnits, preds):
     ''' Prepare the data to be evaluated '''
     d = {}
     d["actual"] = dataDict["testY"]
-    d["pred"]   = preds
+    d["XGB"]    = preds
     d["unit"]   = svUnits
     df = pd.DataFrame(d)
     df.set_index("unit", inplace=True)
@@ -59,6 +59,9 @@ def process(dataDict, parms, config):
     results = []
     count = 1
     
+    print("\n{} combinations".format(len(parms)))
+    print("{:<10}{:<8}{}".format("Count", "MAPE", "RMSE"))
+    
     for x in parms:
         params = {"booster": "gbtree",\
                   'n_estimators': x[0],\
@@ -72,14 +75,17 @@ def process(dataDict, parms, config):
         
         regr = xgb.XGBRegressor(**params)
         regr.fit(dataDict["trainX"], dataDict["trainY"])
-        preds = regr.predict(dataDict["testX"])
-        df    = formatPreds(dataDict, svUnits, preds)
-        mape, rmse = evaluate(df, config["evaluationMethod"])
-        print("{}{:<8.2f}{}{:.2f}".format("mape ", mape, "rmse: ", rmse))
+        preds  = regr.predict(dataDict["testX"])
+        df     = formatPreds(dataDict, svUnits, preds)
+        
+        errors = evaluate(df, ensemble=False)
+        mape = errors["XGB"]["mape"]
+        rmse = errors["XGB"]["rmse"]
+        print("{:<10}{:<10.1%}{:.2f}".format(count, mape, rmse))
         tup = (x, mape, rmse)
         results.append(tup)
+        
         saveModel(regr, count)
-        print("Done with {} of {}".format(count, len(parms)))
         count += 1
     return results
 
