@@ -13,10 +13,10 @@ import argparse
 
 def getArgs():
     parser = argparse.ArgumentParser()
-    parser.add_argument("genFeatures", \
+    '''parser.add_argument("genFeatures", \
                         choices=['Y','N'], \
                         help="Generate additional features or not")
     parser.add_argument("-O", "--Outliers", \
                         choices=['Y','N'], \
-                        help="Remove outliers or not; Y to remove")
+                        help="Remove outliers or not; Y to remove")'''
     return parser.parse_args()

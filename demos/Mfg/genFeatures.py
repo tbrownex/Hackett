@@ -8,6 +8,8 @@ def meanDiff(df):
     cols = ["sensor1","sensor2","sensor3","sensor4","sensor5","sensor6","sensor7","sensor8",\
             "sensor9","sensor10","sensor11","sensor12","sensor13","sensor14","sensor15","sensor16",\
             "sensor17","sensor18","sensor19","sensor20","sensor21"]
+    print(cols)
+    input()
     dfList = []
     df.set_index("unit", inplace=True)
     grp = df.groupby(level=0)
@@ -23,16 +25,17 @@ def meanDiff(df):
     df = pd.concat(dfList, ignore_index=True)
     return df
 
-def movingMean(df):
+def movingMean(train, test):
     '''
     For each sensor, get the mean from cycles that have >100 RUL. Then for each reading, compute the
     difference between the current reading and that mean.
     '''
-    cols = ["sensor1","sensor2","sensor3","sensor4","sensor5","sensor6","sensor7","sensor8",\
-            "sensor9","sensor10","sensor11","sensor12","sensor13","sensor14","sensor15","sensor16",\
-            "sensor17","sensor18","sensor19","sensor20","sensor21"]
+    tmp = train.columns
+    sensorCols = [col for col in train.columns if col.startswith("sensor")]
+    print(sensorCols)
+    input()
     dfList = []
-    df.set_index("unit", inplace=True)
+    train.set_index("unit", inplace=True)
     grp = df.groupby(level=0)
     
     for key, val in grp:
@@ -68,8 +71,8 @@ def movingStd(df):
     df = pd.concat(dfList, ignore_index=True)
     return df
 
-def genFeatures(df):
+def genFeatures(train, test):
     #df = meanDiff(df)
-    #df = movingMean(df)
-    df = movingStd(df)
-    return df
+    train, test = movingMean(train, test)
+    #df = movingStd(df)
+    return train, test

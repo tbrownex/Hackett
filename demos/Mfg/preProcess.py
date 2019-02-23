@@ -12,6 +12,7 @@ __author__ = "Tom Browne"
 from normalizeData import normalize
 from analyzeCols import analyzeCols
 from removeOutliers import removeOutliers
+from genFeatures import genFeatures
 
 def removeCols(train, test):
     cols   = train.columns
@@ -36,16 +37,21 @@ def splitLabels(train, test, config):
     return d
 
 def preProcess(train, test, config, args):
-    # Shuffle the training data
-    train = train.sample(frac=1).reset_index(drop=True)
-    
     del train["set"]
-    del train["unit"]
-    del test["set"]   # Keep unit on test so we can plot predictions by unit
+    del test["set"]
     
     train, test = removeCols(train, test)
+    
+    if args.genFeatures == "Y":
+        print("\nGenerating features")
+        df = genFeatures(train, test)
+
+    del train["unit"]   # Keep unit on test so we can plot predictions by unit
+
     dataDict    = splitLabels(train, test, config)
     dataDict    = normalize(dataDict, "Std")
     if args.Outliers == "Y":
         dataDict = removeOutliers(dataDict)
+    # Shuffle the training data
+    train = train.sample(frac=1).reset_index(drop=True)
     return dataDict

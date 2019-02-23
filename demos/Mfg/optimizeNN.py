@@ -1,8 +1,3 @@
-from numpy.random import seed
-seed(3)
-from tensorflow import set_random_seed
-set_random_seed(3)
-
 import pandas as pd
 import numpy  as np
 import os
