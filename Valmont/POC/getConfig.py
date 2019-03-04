@@ -12,15 +12,15 @@ __author__ = "The Hackett Group"
 def getConfig():
 
     d = {}
-    d["dataLoc"]     = "/home/tbrownex/data/Hackett/Valmont/POC/"
-    d["fileName"]    = "testData.csv"
+    d["dataLoc"]     = "/home/tbrownex/data/Hackett/Valmont/"
+    d["fileName"]    = "MEImerged.csv"
     d["labelColumn"] = "Label"
     d["labelType"]   = "continuous"
     d["logLoc"]      = "/home/tbrownex/"
     d["logFile"]     = "Valmont.log"
     d["logDefault"]  = "info"
-    d["valPct"]      = 0.15
-    d["testPct"]     = 0.25
+    d["valPct"]      = 0.
+    d["testPct"]     = 0.
     d["TBdir"]       = '/home/tbrownex/TF/TensorBoard'         # where to store Tensorboard data
     d["modelDir"]    = "/home/tbrownex/repos/Hackett/Valmont/POC/models/"  # where to save models
     return d

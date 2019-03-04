@@ -13,12 +13,12 @@ def getConfig():
 
     d = {}
     d["dataLoc"]    = "/home/tbrownex/data/Hackett/Valmont/"
-    d["fileName"]  = "rawData.csv"
+    d["fileName"]  = "final.csv"
     d["labelColumn"] = "Valmont_Net_Sales_Pounds"
     d["labelType"] = "continuous"
     d["logLoc"]     = "/home/tbrownex/"
     d["logFile"]    = "Valmont.log"
     d["logDefault"] = "info"
     d["valPct"]   = 0.
-    d["testPct"]   = 0.0
+    d["testPct"]   = 0.
     return d
