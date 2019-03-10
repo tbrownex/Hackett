@@ -71,7 +71,7 @@ def formatPreds(dataDict, svUnits, preds):
     df.set_index("unit", inplace=True)
     return df
 
-def runNN(dataDict, parmDict, svUnits, config):    
+def runNN(dataDict, parmDict, svUnits, config):
     '''data: dictionary holding Train, Validation and Test sets'''
     nn = buildNetwork(parmDict)
     fitNetwork(dataDict, parmDict, nn, config)

@@ -15,6 +15,7 @@ from removeOutliers import removeOutliers
 from genFeatures import genFeatures
 
 def removeCols(train, test):
+    ''' if any column is constant (same value for all rows) remove it '''
     cols   = train.columns
     remove = analyzeCols(train)
     keep = [col for col in cols if col not in remove]
@@ -37,21 +38,28 @@ def splitLabels(train, test, config):
     return d
 
 def preProcess(train, test, config, args):
-    del train["set"]
-    del test["set"]
+    '''
+    - Remove constant columns
+    - (optional) generate features like moving mean, std, etc.
+    - Shuffle training data
+    - Remove "Unit" from training data
+    - Split features and labels
+    - (optional) remove outliers
+    '''
     
     train, test = removeCols(train, test)
     
     if args.genFeatures == "Y":
         print("\nGenerating features")
-        df = genFeatures(train, test)
+        train, test = genFeatures(train, test)
+
+    # Shuffle the training data
+    train = train.sample(frac=1).reset_index(drop=True)
 
     del train["unit"]   # Keep unit on test so we can plot predictions by unit
 
     dataDict    = splitLabels(train, test, config)
     dataDict    = normalize(dataDict, "Std")
     if args.Outliers == "Y":
-        dataDict = removeOutliers(dataDict)
-    # Shuffle the training data
-    train = train.sample(frac=1).reset_index(drop=True)
+        dataDict = removeOutliers(dataDict, config)
     return dataDict

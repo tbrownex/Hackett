@@ -51,6 +51,7 @@ def formatPreds(dataDict, svUnits, preds):
     df = pd.DataFrame(d)
     df.set_index("unit", inplace=True)
     return df
+
 if __name__ == "__main__":
     args   = getArgs()
     config = getConfig()

@@ -12,7 +12,6 @@ __author__ = "Tom Browne"
 
 import numpy  as np
 import pandas as pd
-import logging
 from getBaselinePreds  import getBaselinePreds
 from getRFpreds  import getRFpreds
 from getNNpreds  import getNNpreds
@@ -20,6 +19,7 @@ from getXGBpreds import getXGBpreds
 
 def process(dataDict, config):
     predDF = pd.DataFrame()
+    
     # Baseline first
     preds              = getBaselinePreds(dataDict)
     preds              = np.reshape(preds, newshape=[-1,])

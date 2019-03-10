@@ -1,21 +1,13 @@
 ''' This is the point of entry for forecasating.
     Assumption is that the individual algorithms have had some parameter optimization done already
-    and models have been generated and stored in some folder
+    and models have been generated and stored in a folder
     Two input files: one holds Training data and the other Test
     Data format:
        - "set" splits the data into 4 groups; you can't mix the groups
        - "unit" groups a bunch of readings for a specific machine
        - "cycle" is a single operational cycle; could be something like one-hour continuous operation
        - "settings" and "sensors" are the diagnostics which will serve as features
-       - "RUL" is measured in cycles and serves as the label
-       
-    This module will:
-    - get the command line arguments
-    - get the Config file
-    - set the Logging level
-    - read the input files
-    - prep the data and put into a dictionary
-    - kick off the processing '''
+       - "RUL" is measured in cycles and serves as the label '''
     
 __author__ = "Tom Browne"
 
@@ -62,8 +54,7 @@ if __name__ == "__main__":
     '''
     - Get the Job number for this job
     - Set up logging
-    - User will specify the dataset to use
-    - Load Train and Test dataframes with user-specified dataset
+    - User will specify the dataset to use ("Set")
     - Kick off processing
     '''
     args   = getArgs()
@@ -84,5 +75,4 @@ if __name__ == "__main__":
     dataDict = preProcess(train, test, config, args)
     errors   = process(dataDict, config)
     
-    #print("\nCost method: ", config["evaluationMethod"])
     finishUp(errors, job)

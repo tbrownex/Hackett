@@ -61,10 +61,9 @@ def fitNetwork(dataDict, parmDict, nn, config):
 def scoreNetwork(df, nn):
     data  = np.array(df)
     preds = nn.predict(x=data)
-    rmse  = calcRMSE(df, preds)
-    mape  = calcMAPE(df, preds)
-    # rmse is a series: one value for each column. Return the avg across all columns
-    return mape.mean(), rmse.mean()
+    mse  = (np.square(data - preds)).mean(axis=None)
+    mape = np.mean(np.abs((data - preds) / data))
+    return mape, mse
 
 def runNN(dataDict, parmDict, config):    
     '''data: dictionary holding Train, Validation and Test sets'''

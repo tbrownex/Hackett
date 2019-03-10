@@ -11,8 +11,8 @@ def predict(model, testCases):
 
 def getNNpreds(dataDict, config):
     '''
-    Get any NN models that have been built. One should be typical (the optimized one) but more are ok
-    For each model, generate predictions against the Test set
+    Get any NN models that have been built. Typically there will be only one model - the optimized one - but
+    more are ok. For each model, generate predictions against the Test set
     
     "predictions" is a numpy array initialized empty, then you add a column for each model's predictions
     The shape of "predictions" is [rows of test cases, number of models]

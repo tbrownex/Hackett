@@ -1,0 +1,13 @@
+All the data is stored in ~/data/Hackett/Valmont:
+    - Fred/ has datasets I selected randomly
+    - Factset/ has Tony's download. The download itself is in the .xlsx and is not suitable for a CSV so I used
+    Excel to strip out the formatting and create the "daily", "weekly", "monthly" extracts
+    - Valmont's labels ("Revenue" and "Volumne") are found in "ValmontData.csv". That comes from Tony and Brett
+    who sent the original file going back to about spring of 2018.
+
+So the idea is to merge the two sets of MEI data (from Fred and Factset) for the features, then append the labels from ValmontData
+
+1. Run "1a prepFactset" which will merge all the Factset stuff into one file
+2. Run "1b prepFred" which will do the same for Fred
+3. Run "merge" which will join FactSet and Fred, then apply the Valmont label
+Now the data is in one file and ready for input to ML

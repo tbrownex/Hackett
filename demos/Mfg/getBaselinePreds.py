@@ -3,9 +3,8 @@
     - 100 Units
     - Avg = 206 cycles to failure
     
-    So in the Test data, after 100 cycles you would say RUL = 206-100=106
+    So in the Test data, after 100 cycles, you would say RUL = 206-100=106
     '''
-    # Create the Baseline forecast: simple predictor of just the mean cycles per unit in Training data
 import pandas as pd
 import numpy  as np
 

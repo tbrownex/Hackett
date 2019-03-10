@@ -8,14 +8,10 @@ __author__ = "The Hackett Group"
 
 def getConfig():
     d = {}
-    d["dataLoc"]    = "/home/tbrownex/data/Hackett/demos/CMAPSS/"
-    d["fileName"]  = "train.csv"
-    d["testFile"]  = "test.csv"
-    d["labelColumn"] = "RUL"
+    d["inputShape"] = [28,28,1]
     d["logLoc"]     = "/home/tbrownex/"
-    d["logFile"]    = "demoMfg.log"
+    d["logFile"]    = "MNIST.log"
     d["logDefault"] = "info"
-    d["testPct"]   = 0.     # There is a separate file with Test data
     d["TBdir"] = '/home/tbrownex/TF/TensorBoard'         # where to store Tensorboard data
-    d["modelDir"] = "/home/tbrownex/repos/Hackett/demos/Mfg/models/"  # where to save models
+    d["modelDir"] = "/home/tbrownex/TF/models/"  # where to save models
     return d

@@ -1,5 +1,5 @@
 import itertools
-from tensorflow import keras
+''' This is the set of parameters we're "gridsearching" when optimizing the algos '''
 
 def getParms(typ):
     if typ == "RF":

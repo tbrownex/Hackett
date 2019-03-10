@@ -3,6 +3,7 @@ import numpy  as np
 import os
 import sys
 import time
+from pathlib import Path
 import warnings
 from sklearn.exceptions import DataConversionWarning
 warnings.filterwarnings(action='ignore', category=DataConversionWarning)
@@ -13,6 +14,7 @@ from getData import getData
 from getModelParms import getParms
 from preProcess import preProcess
 from kerasNN import runNN
+
 import jobNumber as job
 from selectSet import selectSet
 from getSet import getSet
@@ -34,7 +36,8 @@ def createVal(d):
 # of runs later
 def writeResults(results):
     delim = ","
-    with open("/home/tbrownex/NNscores.csv", 'w') as summary:
+    home = str(Path.home())
+    with open(home+"/NNscores.csv", 'w') as summary:
         hdr = "L1"+delim+"activation"+delim+"batchSize"+delim+"LR"+\
         delim+"StdDev"+delim+"Dropout"+delim+"optimizer"+delim+"MAPE"+delim+"RMSE"+"\n"
         summary.write(hdr)

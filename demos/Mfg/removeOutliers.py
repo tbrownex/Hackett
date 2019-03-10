@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import tensorflow as tf
+from getModels import getModels
 
 def calcDiff(preds, trainData):
     return trainData - preds
@@ -20,14 +21,15 @@ def getPredictions(dataDict, nn):
     data  = np.array(dataDict["trainX"])
     return nn.predict(data)
 
-def getModel():
-    return tf.keras.models.load_model(filepath="autoencoder.hdf5", compile=False)
+def loadModel(fname):
+    return tf.keras.models.load_model(filepath=fname[0], compile=False)
 
-def removeOutliers(dataDict):
+def removeOutliers(dataDict, config):
     '''
     Autoencoder has been optimized. Load the model; make predictions; identify outliers
     '''
-    nn       = getModel()
+    fname    = getModels("AE", config)
+    nn       = loadModel(fname)
     preds    = getPredictions(dataDict, nn)
     diff     = calcDiff(preds, dataDict["trainX"])
     outliers = getOutliers(diff)
