@@ -46,7 +46,6 @@ def preProcess(train, test, config, args):
     - Split features and labels
     - (optional) remove outliers
     '''
-    
     train, test = removeCols(train, test)
     
     if args.genFeatures == "Y":

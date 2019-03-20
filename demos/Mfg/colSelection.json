@@ -1,0 +1,86 @@
+[
+    {
+        "column": "sensor1",
+        "include": "N"
+    },
+    {
+        "column": "sensor2",
+        "include": "Y"
+    },
+    {
+        "column": "sensor3",
+        "include": "Y"
+    },
+    {
+        "column": "sensor4",
+        "include": "Y"
+    },
+    {
+        "column": "sensor5",
+        "include": "N"
+    },
+    {
+        "column": "sensor6",
+        "include": "Y"
+    },
+    {
+        "column": "sensor7",
+        "include": "Y"
+    },
+    {
+        "column": "sensor8",
+        "include": "Y"
+    },
+    {
+        "column": "sensor9",
+        "include": "Y"
+    },
+    {
+        "column": "sensor10",
+        "include": "N"
+    },
+    {
+        "column": "sensor11",
+        "include": "Y"
+    },
+    {
+        "column": "sensor12",
+        "include": "Y"
+    },
+    {
+        "column": "sensor13",
+        "include": "Y"
+    },
+    {
+        "column": "sensor14",
+        "include": "Y"
+    },
+    {
+        "column": "sensor15",
+        "include": "Y"
+    },
+    {
+        "column": "sensor16",
+        "include": "N"
+    },
+    {
+        "column": "sensor17",
+        "include": "Y"
+    },
+    {
+        "column": "sensor18",
+        "include": "N"
+    },
+    {
+        "column": "sensor19",
+        "include": "N"
+    },
+    {
+        "column": "sensor20",
+        "include": "Y"
+    },
+    {
+        "column": "sensor21",
+        "include": "Y"
+    }
+]

@@ -34,7 +34,7 @@ def getParms(typ):
         batchSize    = [64]
         learningRate = [1e-3]
         std          = [0.25]
-        dropout      = [0.4]
+        dropout      = [0.3]
         optimizer    = ["Adam"]
         return list(itertools.product(L1Size,
                                       activation,

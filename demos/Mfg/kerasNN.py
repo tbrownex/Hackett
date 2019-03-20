@@ -43,6 +43,8 @@ def buildNetwork(parmDict):
                                        decay=1e-6,\
                                        amsgrad=False)
     nn.compile(optimizer=opt, loss="mse")
+    print(nn.get_config())
+    sys.exit()
     return nn
 
 def fitNetwork(dataDict, parmDict, nn, config):

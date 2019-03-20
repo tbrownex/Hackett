@@ -27,23 +27,23 @@ def fitNetwork(dataDict, model, config):
     checkpoint = keras.callbacks.ModelCheckpoint(filepath,\
                                                  save_weights_only=False,\
                                                  monitor='val_acc',\
-                                                 verbose=1,\
+                                                 verbose=0,\
                                                  save_best_only=True,\
                                                  mode='max')
-
+    print("\nTraining the model...")
     model.fit(dataDict["trainX"], dataDict["trainY"],\
               #batch_size=parmDict["batchSize"],\
               epochs=3,\
               validation_split=0.15,\
               verbose=0,\
               shuffle=False,
-              #callbacks=[TB],
-              callbacks=[checkpoint])
+              callbacks=[TB, checkpoint])
+    print("Done training")
 
 def printResults(results, model):
     print("\n{:<10}{}".format("Metric", "Value"))
     for idx, metric in enumerate(model.metrics_names):
-        print("{:<10}{:.2f}".format(metric, results[idx]))
+        print("{:<10}{:.3f}".format(metric, results[idx]))
 
 def process(dataDict, config):
     model = createNetwork(config["inputShape"])
@@ -52,8 +52,8 @@ def process(dataDict, config):
                   metrics=['accuracy'])
     
     fitNetwork(dataDict, model, config)
-    print("\nRunning Test data...")
-    results = model.evaluate(dataDict["testX"], dataDict["testY"])
+    print("\nRunning against Test data...")
+    results = model.evaluate(dataDict["testX"], dataDict["testY"], verbose=0)
     printResults(results, model)
 
 if __name__ == "__main__":
@@ -63,6 +63,6 @@ if __name__ == "__main__":
     dataDict = preProcess(train, test, config, args)
     
     print("\nTraining with {:,} images of shape {}".format(dataDict["trainX"].shape[0],\
-                                                         dataDict["trainX"][0].shape))
+                                                           dataDict["trainX"][0].shape))
     print('Testing with {:,} images'.format(dataDict["testX"].shape[0]))
     process(dataDict, config)

@@ -24,7 +24,6 @@ def createVal(d):
     trainSize = d["trainX"].shape[0] - valSize
     d["trainX"] = d["trainX"].head(trainSize)
     d["valX"] = d["trainX"].tail(valSize)
-    
     return d
 
 # This file stores the results for each set of parameters so you can review a series
@@ -74,7 +73,7 @@ if __name__ == "__main__":
     
     start_time = time.time()
     print("\n{} parameter combinations".format(len(parms)))
-    print("{:<6}{:<10}{}".format("Count", "MAPE","RMSE"))
+    print("{:<6}{:<10}{}".format("Count", "MAPE","MSE"))
     
     for x in parms:
         parmDict = {}                  # holds the hyperparameter combination for one run
@@ -87,13 +86,13 @@ if __name__ == "__main__":
         parmDict['dropout']     = x[6]
         parmDict['optimizer']   = x[7]
         
-        mape, rmse = runNN(dataDict, parmDict, config)
+        mape, mse = runNN(dataDict, parmDict, config)
         
-        print("{:<6}{:<8.2f}{:.2f}".format(count, mape, rmse))
-        tup = (x, mape, rmse)
+        print("{:<6}{:<10.2f}{:.2f}".format(count, mape, mse))
+        tup = (x, mape, mse)
         results.append(tup)
         count +=1
             
     # Write out a summary of the results
     writeResults(results)
-    print("Complete after {:,.0f} minutes".format((time.time() -start_time)/60))
+    print("\nComplete after {:,.0f} minutes".format((time.time() -start_time)/60))

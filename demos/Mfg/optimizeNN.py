@@ -13,7 +13,8 @@ from getArgs import getArgs
 from getData import getData
 from getModelParms import getParms
 from preProcess import preProcess
-from kerasNN import runNN
+#from kerasNN import runNN
+from nn import runNN
 
 import jobNumber as job
 from selectSet import selectSet

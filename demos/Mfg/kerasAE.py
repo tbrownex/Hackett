@@ -10,8 +10,6 @@ from sklearn.exceptions import DataConversionWarning
 warnings.filterwarnings(action='ignore', category=DataConversionWarning)
 
 from evaluate import evaluate
-from calcRMSE import calcRMSE
-from calcMAPE import calcMAPE
 
 def buildLayers(parmDict, featureCount):
     Dense   = partial(keras.layers.Dense)
@@ -61,6 +59,7 @@ def fitNetwork(dataDict, parmDict, nn, config):
 def scoreNetwork(df, nn):
     data  = np.array(df)
     preds = nn.predict(x=data)
+    
     mse  = (np.square(data - preds)).mean(axis=None)
     mape = np.mean(np.abs((data - preds) / data))
     return mape, mse

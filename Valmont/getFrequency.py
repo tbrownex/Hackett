@@ -1,11 +1,11 @@
-def getFrequency(col):
+import csv
+
+def getFrequency():
     '''
-    Determine whether the MEI column is quarterly or monthly based on how many unique values:
-    Quarterly has its values repeated 3 times for the months in a quarter so will have 1/3 the number
-    of unique values
+    colFrequency has been loaded with a mapping of Column:Frequency (Weekly, monthly...)
     '''
-    s = col.unique()
-    if len(s) > 25:
-        return "Monthly"
-    else:
-        return "Quarterly"
+    
+    with open('/home/tbrownex/data/Hackett/Valmont/colFrequency.csv', mode='r') as f:
+        reader = csv.reader(f, delimiter='|')
+        d = {rows[0]:rows[1] for rows in reader}
+    return d
