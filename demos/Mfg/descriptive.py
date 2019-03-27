@@ -1,10 +1,24 @@
 import json
 import pandas as pd
 
-from getConfig import getConfig
-from getCols   import getCols
+from getConfig   import getConfig
+from getData     import getData
+from getUserCols import getCols
 from analyzeCols import analyzeCols
 from getHighCorr import getHighCorr
+
+def prepData(df, config):
+    # For demo purposes user won't select the Set, just use set 1
+    df = df.loc[df["set"]==1]
+    # See what columns, if any, have been de-selected
+    keep = getCols(config)
+    df = df[keep]
+    # Don't need descriptives of these columns (in case user didn't de-select them)
+    try:
+        df.drop(columns=["set", "unit", "cycle"], inplace=True)
+    except:
+        pass
+    return df
 
 def getNulls(df):
     N = df.isnull().sum()
@@ -15,22 +29,31 @@ def getNulls(df):
     return d
 
 def getMeans(df):
-    d = {}
+    l = []
     for col, m in df.mean().iteritems():
-        d[col] = round(m,2)
-    return d
+        d = {}
+        d["name"] = col
+        d["value"]  = round(m,2)
+        l.append(d)
+    return l
 
 def getMedians(df):
-    d = {}
+    l = []
     for col, m in df.median().iteritems():
-        d[col] = m
-    return d
+        d = {}
+        d["name"] = col
+        d["value"]  = round(m,2)
+        l.append(d)
+    return l
 
 def getStdDevs(df):
-    d = {}
+    l = []
     for col, m in df.std().iteritems():
-        d[col] = round(m,2)
-    return d
+        d = {}
+        d["name"] = col
+        d["value"]  = round(m,2)
+        l.append(d)
+    return l
 
 def getCategoricals(df):
     ''' These are columns which may need to "one-hot encoded". But we have to limit how many different
@@ -49,7 +72,6 @@ def getCategoricals(df):
 def getStatic(df):
     ''' Identify single-value columns '''
     return analyzeCols(df)
-
 
 def getAlphas(df):
     ''' Show the alpha columns: they may need to be treated differently '''
@@ -87,22 +109,14 @@ def getCorr(df, threshold, data):
             l.append(tmp)
     return l
 
-if __name == "__main__":
+if __name__ == "__main__":
     '''
     Create a JSON file containing all sorts of descriptive info of the data.
     Each key in the JSON file is a different type of metric
     '''
     config = getConfig()
-    print(config)
-    df = pd.read_csv(config["dataLoc"]+config["fileName"])
-    
-    # For demo purposes user won't select the Set, just use set 1
-    df = df.loc[df["set"]==1]
-    # Don't need descriptives of these columns
-    df.drop(columns=["set", "unit", "cycle"], inplace=True)
-    # See what columns, if any, have been de-selected
-    keep = getCols(config)
-    df = df[keep]
+    df, _  = getData(config)    # Don't run stats on Test
+    df     = prepData(df, config)
 
     data = {}
     data["nulls"]   = getNulls(df)
@@ -115,5 +129,5 @@ if __name == "__main__":
     data["lowRange"] = getLowRange(df)
     data["highCorr"] = getCorr(df, 0.85, data)
 
-    with open(config["JSONloc"] + "descriptive.json", "w") as output:
+    with open(config["JSONloc"] + "stats.json", "w") as output:
         json.dump(data, output, sort_keys=True, indent=4)

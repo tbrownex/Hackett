@@ -13,6 +13,7 @@ from normalizeData import normalize
 from analyzeCols import analyzeCols
 from removeOutliers import removeOutliers
 from genFeatures import genFeatures
+from getUserCols import getCols
 
 def removeCols(train, test):
     ''' if any column is constant (same value for all rows) remove it '''
@@ -24,6 +25,15 @@ def removeCols(train, test):
     keep = [col for col in cols if col not in remove]
     test  = test[keep]
     return train, test
+
+def userCols(dataDict, config):
+    ''' the user selects what columns to analyze '''
+    user = getCols(config)
+    cols = dataDict["trainX"].columns
+    keep = [col for col in  cols if col in user]
+    dataDict["trainX"] = dataDict["trainX"][keep]
+    dataDict["testX"] = dataDict["testX"][keep]
+    return dataDict
 
 def splitLabels(train, test, config):
     '''  Separate the features and labels  '''
@@ -37,7 +47,8 @@ def splitLabels(train, test, config):
     d["testX"] = test
     return d
 
-def preProcess(train, test, config, args):
+#def preProcess(train, test, config, args):
+def preProcess(train, test, config):
     '''
     - Remove constant columns
     - (optional) generate features like moving mean, std, etc.
@@ -48,17 +59,23 @@ def preProcess(train, test, config, args):
     '''
     train, test = removeCols(train, test)
     
-    if args.genFeatures == "Y":
+    '''if args.genFeatures == "Y":
         print("\nGenerating features")
-        train, test = genFeatures(train, test)
-
+        train, test = genFeatures(train, test)'''
+    
     # Shuffle the training data
     train = train.sample(frac=1).reset_index(drop=True)
 
-    del train["unit"]   # Keep unit on test so we can plot predictions by unit
-
     dataDict    = splitLabels(train, test, config)
+    
+    ''' Remove Unit since its not a feature, but keep the Test units so we can recreate
+    the Predictions vs Actuals by Unit '''
+    del dataDict["trainX"]["unit"]
+    dataDict["testUnits"] = dataDict["testX"]["unit"]
+    del dataDict["testX"]["unit"]
+    dataDict = userCols(dataDict, config)
+    
     dataDict    = normalize(dataDict, "Std")
-    if args.Outliers == "Y":
-        dataDict = removeOutliers(dataDict, config)
+    '''if args.Outliers == "Y":
+        dataDict = removeOutliers(dataDict, config)'''
     return dataDict

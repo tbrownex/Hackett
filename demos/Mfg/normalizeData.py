@@ -33,11 +33,11 @@ def normalize(dataDict, method):
         train = scaler.transform(dataDict["trainX"])
         dataDict["trainX"] = pd.DataFrame(train, columns=cols)
         # Test has the Unit as a column which needs to be removed (not normalized) then added back
-        svUnits = dataDict["testX"]["unit"]
-        del dataDict["testX"]["unit"]
+        #svUnits = dataDict["testX"]["unit"]
+        #del dataDict["testX"]["unit"]
         test = scaler.transform(dataDict["testX"])
         dataDict["testX"] = pd.DataFrame(test, columns=cols)
-        dataDict["testX"]["unit"] = svUnits
+        #dataDict["testX"]["unit"] = svUnits
         return dataDict
     else:
         arr = dataDict.values

@@ -43,8 +43,6 @@ def buildNetwork(parmDict):
                                        decay=1e-6,\
                                        amsgrad=False)
     nn.compile(optimizer=opt, loss="mse")
-    print(nn.get_config())
-    sys.exit()
     return nn
 
 def fitNetwork(dataDict, parmDict, nn, config):
@@ -63,21 +61,11 @@ def fitNetwork(dataDict, parmDict, nn, config):
            shuffle=False,
            callbacks=[TB])
 
-def formatPreds(dataDict, svUnits, preds):
-    ''' Prepare the data to be evaluated '''
-    d = {}
-    d["actual"] = dataDict["testY"]
-    d["pred"]   = np.reshape(preds, [-1,])
-    d["unit"]   = svUnits
-    df = pd.DataFrame(d)
-    df.set_index("unit", inplace=True)
-    return df
-
-def runNN(dataDict, parmDict, svUnits, config):
+def runNN(dataDict, parmDict, config):
     '''data: dictionary holding Train, Validation and Test sets'''
     nn = buildNetwork(parmDict)
     fitNetwork(dataDict, parmDict, nn, config)
     tf.keras.models.save_model(model=nn, filepath=config["modelDir"]+"NNmodel.h5")
     preds = nn.predict(dataDict["testX"])
     preds = np.reshape(preds, newshape=[-1,])
-    return preds
+    return preds, nn

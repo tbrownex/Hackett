@@ -1,7 +1,31 @@
 [
     {
-        "column": "sensor1",
+        "column": "set",
         "include": "N"
+    },
+    {
+        "column": "unit",
+        "include": "Y"
+    },
+    {
+        "column": "cycle",
+        "include": "Y"
+    },
+    {
+        "column": "setting1",
+        "include": "Y"
+    },
+    {
+        "column": "setting2",
+        "include": "Y"
+    },
+    {
+        "column": "setting3",
+        "include": "Y"
+    },
+    {
+        "column": "sensor1",
+        "include": "Y"
     },
     {
         "column": "sensor2",
@@ -17,7 +41,7 @@
     },
     {
         "column": "sensor5",
-        "include": "N"
+        "include": "Y"
     },
     {
         "column": "sensor6",
@@ -37,7 +61,7 @@
     },
     {
         "column": "sensor10",
-        "include": "N"
+        "include": "Y"
     },
     {
         "column": "sensor11",
@@ -61,7 +85,7 @@
     },
     {
         "column": "sensor16",
-        "include": "N"
+        "include": "Y"
     },
     {
         "column": "sensor17",
@@ -69,11 +93,11 @@
     },
     {
         "column": "sensor18",
-        "include": "N"
+        "include": "Y"
     },
     {
         "column": "sensor19",
-        "include": "N"
+        "include": "Y"
     },
     {
         "column": "sensor20",

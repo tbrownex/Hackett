@@ -10,12 +10,16 @@ def getConfig():
 
     d = {}
     d["dataLoc"]    = "/home/tbrownex/data/Hackett/Valmont/"
-    d["fileName"]   = "final.csv"
+    d["fileName"]   = "ValmontData.csv"
     d["labelColumn"] = "Volume"
     d["labelType"]  = "continuous"
     d["logLoc"]     = "/home/tbrownex/"
     d["logFile"]    = "Valmont.log"
     d["logDefault"] = "info"
     d["valPct"]     = 0.
-    d["testPct"]    = 0.2
+    d["testMonths"] = 12
+    d["lagMonths"] = 3
+    # --- begin ETS parameters ---
+    d["numForecasts"]= 6
+    # --- end of ETS ---
     return d
