@@ -12,11 +12,11 @@ __author__ = "The Hackett Group"
 def getConfig():
 
     d = {}
-    d["dataLoc"]    = "/home/tbrownex/data/test/"
-    d["fileName"]  = "sgemm_product.csv"
-    d["labelColumn"] = "MeanRunTime"
+    d["dataLoc"]    = "/home/tbrownex/data/Hackett/archive/OutFront/"
+    d["fileName"]   = "3_final.csv"
+    d["labelColumn"] = "population"
     d["logLoc"]     = "/home/tbrownex/"
-    d["logFile"]    = "Boeing.log"
+    d["logFile"]    = "OutFront.log"
     d["logDefault"] = "info"
     d["testPct"]   = 0.25
     return d

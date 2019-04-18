@@ -1,48 +1,88 @@
 {
     "alpha": [],
-    "categoricals": {
-        "sensor1": {
-            "count": 1,
-            "error": 0
-        },
-        "sensor10": {
-            "count": 1,
-            "error": 0
-        },
-        "sensor16": {
-            "count": 1,
-            "error": 0
-        },
-        "sensor17": {
+    "categoricals": [
+        {
             "count": 13,
-            "error": 1
+            "error": 1,
+            "name": "setting2"
         },
-        "sensor18": {
+        {
             "count": 1,
-            "error": 0
+            "error": 0,
+            "name": "setting3"
         },
-        "sensor19": {
+        {
             "count": 1,
-            "error": 0
+            "error": 0,
+            "name": "sensor1"
         },
-        "sensor5": {
+        {
             "count": 1,
-            "error": 0
+            "error": 0,
+            "name": "sensor5"
         },
-        "sensor6": {
+        {
             "count": 2,
-            "error": 0
+            "error": 0,
+            "name": "sensor6"
         },
-        "setting2": {
-            "count": 13,
-            "error": 1
-        },
-        "setting3": {
+        {
             "count": 1,
-            "error": 0
+            "error": 0,
+            "name": "sensor10"
+        },
+        {
+            "count": 1,
+            "error": 0,
+            "name": "sensor16"
+        },
+        {
+            "count": 13,
+            "error": 1,
+            "name": "sensor17"
+        },
+        {
+            "count": 1,
+            "error": 0,
+            "name": "sensor18"
+        },
+        {
+            "count": 1,
+            "error": 0,
+            "name": "sensor19"
         }
-    },
+    ],
     "highCorr": [
+        {
+            "col1": "sensor10",
+            "col2": "sensor16",
+            "corr": 1.0
+        },
+        {
+            "col1": "sensor1",
+            "col2": "sensor5",
+            "corr": 1.0
+        },
+        {
+            "col1": "sensor1",
+            "col2": "sensor16",
+            "corr": 1.0
+        },
+        {
+            "col1": "sensor5",
+            "col2": "sensor16",
+            "corr": 1.0
+        },
+        {
+            "col1": "sensor5",
+            "col2": "sensor10",
+            "corr": 1.0
+        },
+        {
+            "col1": "sensor1",
+            "col2": "sensor10",
+            "corr": 1.0
+        },
         {
             "col1": "sensor9",
             "col2": "sensor14",
@@ -50,17 +90,39 @@
         }
     ],
     "lowRange": [
-        "setting3",
-        "sensor1",
-        "sensor2",
-        "sensor5",
-        "sensor6",
-        "sensor8",
-        "sensor10",
-        "sensor13",
-        "sensor16",
-        "sensor18",
-        "sensor19"
+        {
+            "name": "setting3"
+        },
+        {
+            "name": "sensor1"
+        },
+        {
+            "name": "sensor2"
+        },
+        {
+            "name": "sensor5"
+        },
+        {
+            "name": "sensor6"
+        },
+        {
+            "name": "sensor8"
+        },
+        {
+            "name": "sensor10"
+        },
+        {
+            "name": "sensor13"
+        },
+        {
+            "name": "sensor16"
+        },
+        {
+            "name": "sensor18"
+        },
+        {
+            "name": "sensor19"
+        }
     ],
     "means": [
         {
@@ -282,15 +344,29 @@
             "value": 103.0
         }
     ],
-    "nulls": {},
+    "nulls": [],
     "static": [
-        "setting3",
-        "sensor1",
-        "sensor5",
-        "sensor10",
-        "sensor16",
-        "sensor18",
-        "sensor19"
+        {
+            "name": "setting3"
+        },
+        {
+            "name": "sensor1"
+        },
+        {
+            "name": "sensor5"
+        },
+        {
+            "name": "sensor10"
+        },
+        {
+            "name": "sensor16"
+        },
+        {
+            "name": "sensor18"
+        },
+        {
+            "name": "sensor19"
+        }
     ],
     "stdDevs": [
         {

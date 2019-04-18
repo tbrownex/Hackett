@@ -66,7 +66,7 @@ def preProcess(train, test, config):
     # Shuffle the training data
     train = train.sample(frac=1).reset_index(drop=True)
 
-    dataDict    = splitLabels(train, test, config)
+    dataDict = splitLabels(train, test, config)
     
     ''' Remove Unit since its not a feature, but keep the Test units so we can recreate
     the Predictions vs Actuals by Unit '''

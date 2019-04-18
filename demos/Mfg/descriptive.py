@@ -23,10 +23,13 @@ def prepData(df, config):
 def getNulls(df):
     N = df.isnull().sum()
     N =N[N>0]
-    d = {}
+    l = []
     for col, count in N.iteritems():
-        d[col] = count
-    return d
+        d = {}
+        d["name"] = col
+        d["count"] = count
+        l.append(d)
+    return l
 
 def getMeans(df):
     l = []
@@ -60,34 +63,54 @@ def getCategoricals(df):
     categories to encode. '''
     low = 11
     high = 30
-    d = {}
+    l = []
     for col in df.columns:
         count = len(df[col].unique())
         if count < low:
-            d[col] = dict({"count":count, "error":0})
+            d = {}
+            d["name"] = col
+            d["count"] = count
+            d["error"] = 0
+            l.append(d)
         elif count < high:
-            d[col] = dict({"count":count, "error":1})
-    return d
+            d = {}
+            d["name"] = col
+            d["count"] = count
+            d["error"] = 1
+            l.append(d)
+    return l
 
 def getStatic(df):
     ''' Identify single-value columns '''
-    return analyzeCols(df)
+    l = []
+    static = analyzeCols(df)
+    for col in static:
+        d = {}
+        d["name"] = col
+        l.append(d)
+    return l
 
 def getAlphas(df):
     ''' Show the alpha columns: they may need to be treated differently '''
     l = []
     for col, typ in df.dtypes.items():
         if typ == "object":
-            l.append(col)
+            d = {}
+            d["name"] = col
+            l.append(d)
     return l
 
 def getLowRange(df):
     ''' This is to identify a few columns that are almost static but not quite '''
+    types = df.dtypes
     l = []
     for col in df.columns:
-        width = (df[col].max() - df[col].min()) / df[col].max()
-        if width < .008:
-            l.append(col)
+        if types.loc[col] != "object":
+            width = (df[col].max() - df[col].min()) / df[col].max()
+            if width < .008:
+                d = {}
+                d["name"] = col
+                l.append(d)
     return l
 
 def getCorr(df, threshold, data):
@@ -103,10 +126,10 @@ def getCorr(df, threshold, data):
         if col1 in data["static"] or col2 in data["static"]:
             pass
         else:
-            tmp = {}
-            tmp["col1"], tmp["col2"]  = col1, col2
-            tmp["corr"] = round(corr,2)
-            l.append(tmp)
+            d = {}
+            d["col1"], d["col2"]  = col1, col2
+            d["corr"] = round(corr,2)
+            l.append(d)
     return l
 
 if __name__ == "__main__":
@@ -119,6 +142,12 @@ if __name__ == "__main__":
     df     = prepData(df, config)
 
     data = {}
+    
+    '''df.loc[50, "sensor20"] = None
+    print(df.loc[50]["sensor20"])
+    df["Tom"] = "Tom"'''
+    
+    
     data["nulls"]   = getNulls(df)
     data["means"]   = getMeans(df)
     data["medians"] = getMedians(df)

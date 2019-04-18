@@ -19,6 +19,6 @@ def getConfig():
     d["logLoc"]     = "/home/tbrownex/"
     d["logFile"]    = "demoMfg.log"
     d["logDefault"] = "info"
-    d["TBdir"] = '/home/tbrownex/TF/TensorBoard'         # where to store Tensorboard data
+    d["TBdir"] = '/home/tbrownex/TF/TensorBoard/'         # where to store Tensorboard data
     d["modelDir"] = "/home/tbrownex/repos/Hackett/demos/Mfg/models/"  # where to save models
     return d

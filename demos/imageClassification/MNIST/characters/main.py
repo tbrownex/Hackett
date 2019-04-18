@@ -1,0 +1,67 @@
+import numpy as np
+import tensorflow as tf
+from tensorflow import keras
+from keras.models import Sequential
+from keras.layers import Dense, Conv2D, Dropout, Flatten, MaxPooling2D
+
+#from getArgs    import getArgs
+from getConfig  import getConfig
+from getData    import getData
+from preProcess import preProcess
+
+__author__ = "Tom Browne"
+
+def createNetwork(inputShape):
+    model = Sequential()
+    model.add(Conv2D(28, kernel_size=(3,3), input_shape=inputShape))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Flatten()) # Flattening the 2D arrays for fully connected layers
+    model.add(Dense(128, activation=tf.nn.relu))
+    model.add(Dropout(0.2))
+    model.add(Dense(26,activation=tf.nn.softmax))
+    return model
+
+def fitNetwork(dataDict, model, config):
+    TB = keras.callbacks.TensorBoard(log_dir=config["TBdir"])
+    filepath = config["modelDir"]+"NNmodel.hdf5"
+    checkpoint = keras.callbacks.ModelCheckpoint(filepath,\
+                                                 save_weights_only=False,\
+                                                 monitor='val_acc',\
+                                                 verbose=0,\
+                                                 save_best_only=True,\
+                                                 mode='max')
+    print("\nTraining the model...")
+    model.fit(dataDict["trainX"], dataDict["trainY"],\
+              #batch_size=parmDict["batchSize"],\
+              epochs=10,\
+              validation_split=0.15,\
+              verbose=0,\
+              shuffle=False,
+              callbacks=[TB, checkpoint])
+    print("Done training")
+
+def printResults(results, model):
+    print("\n{:<10}{}".format("Metric", "Value"))
+    for idx, metric in enumerate(model.metrics_names):
+        print("{:<10}{:.3f}".format(metric, results[idx]))
+
+def process(dataDict, config):
+    model = createNetwork(config["inputShape"])
+    model.compile(optimizer='adam',
+                  loss='sparse_categorical_crossentropy',
+                  metrics=['accuracy'])
+    
+    fitNetwork(dataDict, model, config)
+    print("\nRunning against Test data...")
+    results = model.evaluate(dataDict["testX"], dataDict["testY"], verbose=0)
+    printResults(results, model)
+
+if __name__ == "__main__":
+    config = getConfig()
+    train, test = getData(config)
+    dataDict = preProcess(train, test, config)
+    
+    print("\nTraining with {:,} images of shape {}".format(dataDict["trainX"].shape[0],\
+                                                           dataDict["trainX"][0].shape))
+    print('Testing with {:,} images'.format(dataDict["testX"].shape[0]))
+    process(dataDict, config)

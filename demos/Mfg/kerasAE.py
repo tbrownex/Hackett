@@ -44,13 +44,14 @@ def buildNetwork(parmDict, featureCount):
     nn.compile(optimizer=opt, loss="mse")
     return nn
 
-def fitNetwork(dataDict, parmDict, nn, config):
-    TB = keras.callbacks.TensorBoard(log_dir=config["TBdir"])
+def fitNetwork(dataDict, parmDict, nn, config, count):
+    TBdir = config["TBdir"]+"run_"+str(count)
+    TB = keras.callbacks.TensorBoard(log_dir=TBdir)
     
     X = np.array(dataDict["trainX"])
     nn.fit(X, X,\
            batch_size=parmDict["batchSize"],\
-           epochs=40,\
+           epochs=20,\
            validation_split=0.15,\
            verbose=0,\
            shuffle=False,
@@ -64,12 +65,12 @@ def scoreNetwork(df, nn):
     mape = np.mean(np.abs((data - preds) / data))
     return mape, mse
 
-def runNN(dataDict, parmDict, config):    
+def runNN(dataDict, parmDict, config, count):    
     '''data: dictionary holding Train, Validation and Test sets'''
     featureCount = dataDict["trainX"].shape[1]
     
     nn = buildNetwork(parmDict, featureCount)
-    fitNetwork(dataDict, parmDict, nn, config)
+    fitNetwork(dataDict, parmDict, nn, config, count)
     tf.keras.models.save_model(model=nn, filepath=config["modelDir"]+"AEmodel.h5")
     scores = scoreNetwork(dataDict["testX"], nn)
     return scores

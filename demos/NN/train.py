@@ -4,113 +4,107 @@ import os
 import sys
 import time
 
-from scale_split_data import partition
-from getDataDirectory import getDir
-from nn               import run
-import jobNumber      as job
-from split_label      import splitY
+from getConfig  import getConfig
+#from getData    import getData
+from preProcess import preProcess
+from getModelParms import getParms
+from nn            import run
 
-TEST_PCT = 0
-VAL_PCT  = 0.20
-FILENM   = 'HH+neighborhood_rank.csv'
-
-# NN hyper-parameters
-l1_size       = [32]          # Count of nodes in layer 1
-learning_rate = [.00001]
-Lambda        = [0.02]          # Regularization parameter
-weight        = [1]              # Degree to which Positives are weighted in the loss function
-batch_size    = [512]
-epochs        = [5]
-activation    = ['ReLU']           # 'tanh' 'leakyReLU' 'ReLU' 'relu6' 'elu' 'crelu'
-
-def getData():
-    data_dir = "/home/tbrownex/data/Hackett/"
-    print("reading data")
-    cols = ["Label","age_alt","income_alt","marital_status","owner_type",\
+def getData(config, rows=None):
+    ''' Specify "cols" and "dtypes" to minimize memory usage, otherwise memory blows up '''
+    cols = ["age_alt","income_alt","marital_status","owner_type",\
             "home_value","num_hh","num_adults","num_kids","net_worth_alt","density",\
             "age_bins","income_bins","hv_bins","density_bins","white","black",\
-            "hispanic","asian","jewish","indian","other","neighborhood_bin"]
-    df = pd.read_csv(data_dir+FILENM, sep="|", usecols=cols,nrows=4000000)
-    print("done")
-    df       = df.sample(frac = 1.0)
-    
-    # Drop any columns with NAN values
-    before = df.shape[0]
-    df     = df.dropna(axis=0, how='any')
-    after  = df.shape[0]
-    print("{}Deleted {:,.0f} rows out of {:,.0f} due to NAN".format(
-            "\n",(before-after), before))
-    return(df)
+            "hispanic","asian","jewish","indian","other","neighborhood_bin", "Label"]
+    sep = "|"
+    types={'Label':"int16",
+          'age_alt': "int16",\
+          'income_alt': "int16",\
+          'marital_status': "int16",\
+          'owner_type': "int16",\
+          'home_value': "int16",\
+          'num_hh': "int16",\
+          'num_adults': "int16",\
+          'num_kids': "int16",\
+          'net_worth_alt': "float64",\
+          'density': "float64",\
+          'age_bins': "int16",\
+          'income_bins': "int16",\
+          'hv_bins': "int16",\
+          'density_bins': "int16",\
+          'white': "int16",\
+          'black': "int16",\
+          'hispanic': "int16",\
+          'asian': "int16",\
+          'jewish': "int16",\
+          'indian': "int16",\
+          'other': "int16",\
+          'neighborhood_bin': "int16"}
+    return pd.read_csv(config["dataLoc"]+config["fileName"],\
+                       sep=sep,\
+                       nrows=rows,\
+                       usecols=cols,\
+                       dtype=types)
 
-def prepareData():
-    '''Read the training data file and create a dictionary with keys of "train_x", "train_labels",
-    "val_x" and "val_labels"'''
-    df = getData()
-    # Move the label to the last column
-    df["label"] = df["Label"]
-    del df["Label"]
-    train, val, _ = partition(df, VAL_PCT, TEST_PCT)
-    data_dict     = splitY(train, val, None)
-    return data_dict
+def loadParms(p):
+    params = {'l1Size':     p[0],
+              'activation': p[1],
+              "Lambda":     p[2],
+              'batchSize':  p[3],
+              'lr':         p[4],
+              'std':        p[5],
+              'dropout':    p[6],
+              'optimizer':  p[7],
+              "weight":     p[8]}
+    return params
 
-def print_sales_ratio(data_dict):
-    pos = np.sum(data_dict['train_labels'][:,1])
-    tot = data_dict['train_labels'].shape[0]
-    print("{}{:>18} {:>12,.0f} rows with {:,.0f} Positives  {}:1".format(
-            "\n", "Training file:",tot, pos, int(tot/pos)))
-    pos = np.sum(data_dict['val_labels'][:,1])
-    tot = data_dict['val_labels'].shape[0]
-    print("{:>18} {:>12,.0f} rows with {:,.0f} Positives  {}:1{}".format("Validation file:",
-            tot, pos, int(tot/pos), "\n"))
-    input()
+def print_sales_ratio(dataDict):
+    print("\n{:<55}{:<12}{}".format("Prevalence of Positives in the different datasets","Dataset", "ratio"))
+    for set in ["trainY", "valY", "testY"]:
+        pos = np.sum(dataDict[set][:,1])
+        tot = dataDict[set].shape[0]
+        print("{:<55}{:<12}{}{}".format("",set, int(tot/pos), ":1"))
+
 # This file stores the results for each set of parameters so you can review a series
 # of runs later
-def writeResults(results, job_id):
-    with open("/home/tom/summary_"+str(job_id)+".txt", 'w') as summary:
-        keys = results[0][1]
-        hdr = "Run" +"|" + "|".join(keys)
-        hdr += "|"+"Lift" + "\n"
+def writeResults(results):
+    with open("/home/tbrownex/summary.txt", 'w') as summary:
+        parm = results[0][0]
+        hdr = "|".join(parm.keys())
+        hdr += "|" +"Score" + "\n"
         summary.write(hdr)        
         
         for x in results:
-            rec = str(x[0]) +"|"
-            rec += "|".join([str(t) for t in x[1].values()])
-            rec += "|"+ str(x[2]) +"\n"         # lift
+            parms = x[0].values()
+            score = round(x[1],4)
+            rec = "|".join([str(t) for t in parms])
+            rec += "|"+ str(score) +"\n"
             summary.write(rec)
-            
+
+def process(dataDict, parms, config):
+    bestRMSE = np.inf
+    bestPreds = None
+    results = []
+    for p in parms:
+        parmDict = loadParms(p)
+        mse = run(dataDict, parmDict, config)
+        tup = (parmDict, mse)
+        results.append(tup)
+        '''if rmse < bestRMSE:
+            bestRMSE  = rmse
+            bestPreds = preds
+            saveModel(nn, config)'''
+    return results
+    #return bestRMSE, bestPreds
+
 if __name__ == "__main__":
-    data_dict = prepareData()    
-    print_sales_ratio(data_dict)
+    config = getConfig()
+    df = getData(config, rows=100000)    # Can't use the "getData" module in /common because of memory limitation
+    dataDict = preProcess(df, config)
+    print_sales_ratio(dataDict)
     
-    job_id = job.getJob()
+    parms = getParms("NN")
     
-    parm_dict = {}                  # holds the hyperparameter combination for one run
-    count = 1
-    parm_dict['l1_size']       = l1_size[0]
-    parm_dict['lambda']        = Lambda[0]
-    parm_dict['weight']        = weight[0]
-    parm_dict['batch_size']    = batch_size[0]
-    parm_dict['epochs']        = epochs[0]
-    parm_dict['activation']    = activation[0]
-    parm_dict['learning_rate'] = .00003
-    parm_dict['std']           = 1.0
-    job_name = "job_" + job_id +"/"+ "run_" + str(count)
-    
-    run(data_dict, parm_dict, job_name)
-    
-    count +=1
-    parm_dict['learning_rate'] = .00003
-    parm_dict['std']           = 0.5
-    job_name = "job_" + job_id +"/"+ "run_" + str(count)
-    
-    run(data_dict, parm_dict, job_name)
-    
-    count +=1
-    parm_dict['learning_rate'] = .00001
-    parm_dict['std']           = 0.25
-    job_name = "job_" + job_id +"/"+ "run_" + str(count)
-    
-    run(data_dict, parm_dict, job_name)
-    
-    job_id = int(job_id)
-    job.setJob(job_id+1)
+    results = process(dataDict, parms, config)
+    writeResults(results)
+    #rmse, preds = process(dataDict, parms, config)

@@ -30,5 +30,4 @@ if __name__ == "__main__":
         unit = np.random.choice(units, 1)
 
     df = df.loc[unit]
-    plot(df, unit)
-    
+    plot(df, unit)    

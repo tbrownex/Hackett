@@ -1,5 +1,6 @@
+import time
+
 from getConfig import getConfig
-import time 
 
 def getData(config):
     df = pd.read_csv(config["demoLoc"]+"predDF.csv")
