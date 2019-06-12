@@ -1,0 +1,87 @@
+2018-11-26 10:55:22,433 - Rows in data source: 690
+2018-11-26 11:40:26,691 - New application start
+2018-11-26 11:40:26,703 - Rows in the input data source: 690
+2018-11-26 11:40:32,364 - End of a run
+2018-11-26 14:23:06,119 - New application start
+2018-11-26 14:23:06,131 - Rows in the input data source: 690
+2018-11-26 14:23:11,935 - Application completed
+2018-11-26 14:27:38,115 - <module> - New application start
+2018-11-26 14:27:38,128 - <module> - Rows in the input data source: 690
+2018-11-26 14:27:43,720 - <module> - Application completed
+2018-11-26 14:29:00,381 - main.py - New application start
+2018-11-26 14:29:00,393 - main.py - Rows in the input data source: 690
+2018-11-26 14:29:06,164 - main.py - Application completed
+2018-11-26 14:33:52,251 - main.py - <module> - New application start
+2018-11-26 14:33:52,263 - main.py - <module> - Rows in the input data source: 690
+2018-11-26 14:34:01,037 - arimaModel.py - trainArima - Rows in the output data source: 690
+2018-11-26 14:34:08,365 - main.py - <module> - Application completed
+2018-11-26 14:39:47,325 - main.py - <module> - New application start
+2018-11-26 14:39:47,337 - main.py - <module> - Rows in the input data source: 690
+2018-11-26 14:39:56,037 - arimaModel.py - trainArima - Rows in this output data: 690
+2018-11-26 14:39:58,674 - etsModel.py - trainETS - Rows in this output data: 690
+2018-11-26 14:39:58,729 - forecaster.py - parse_seasonality_args - Disabling weekly seasonality. Run prophet with weekly_seasonality=True to override this.
+2018-11-26 14:39:58,729 - forecaster.py - parse_seasonality_args - Disabling daily seasonality. Run prophet with daily_seasonality=True to override this.
+2018-11-26 14:40:00,069 - forecaster.py - parse_seasonality_args - Disabling weekly seasonality. Run prophet with weekly_seasonality=True to override this.
+2018-11-26 14:40:00,069 - forecaster.py - parse_seasonality_args - Disabling daily seasonality. Run prophet with daily_seasonality=True to override this.
+2018-11-26 14:40:01,445 - forecaster.py - parse_seasonality_args - Disabling weekly seasonality. Run prophet with weekly_seasonality=True to override this.
+2018-11-26 14:40:01,445 - forecaster.py - parse_seasonality_args - Disabling daily seasonality. Run prophet with daily_seasonality=True to override this.
+2018-11-26 14:40:02,832 - forecaster.py - parse_seasonality_args - Disabling weekly seasonality. Run prophet with weekly_seasonality=True to override this.
+2018-11-26 14:40:02,832 - forecaster.py - parse_seasonality_args - Disabling daily seasonality. Run prophet with daily_seasonality=True to override this.
+2018-11-26 14:40:04,210 - forecaster.py - parse_seasonality_args - Disabling weekly seasonality. Run prophet with weekly_seasonality=True to override this.
+2018-11-26 14:40:04,210 - forecaster.py - parse_seasonality_args - Disabling daily seasonality. Run prophet with daily_seasonality=True to override this.
+2018-11-26 14:40:05,588 - forecaster.py - parse_seasonality_args - Disabling weekly seasonality. Run prophet with weekly_seasonality=True to override this.
+2018-11-26 14:40:05,588 - forecaster.py - parse_seasonality_args - Disabling daily seasonality. Run prophet with daily_seasonality=True to override this.
+2018-11-26 14:40:06,972 - forecaster.py - parse_seasonality_args - Disabling weekly seasonality. Run prophet with weekly_seasonality=True to override this.
+2018-11-26 14:40:06,972 - forecaster.py - parse_seasonality_args - Disabling daily seasonality. Run prophet with daily_seasonality=True to override this.
+2018-11-26 14:40:08,359 - forecaster.py - parse_seasonality_args - Disabling weekly seasonality. Run prophet with weekly_seasonality=True to override this.
+2018-11-26 14:40:08,360 - forecaster.py - parse_seasonality_args - Disabling daily seasonality. Run prophet with daily_seasonality=True to override this.
+2018-11-26 14:40:09,745 - forecaster.py - parse_seasonality_args - Disabling weekly seasonality. Run prophet with weekly_seasonality=True to override this.
+2018-11-26 14:40:09,745 - forecaster.py - parse_seasonality_args - Disabling daily seasonality. Run prophet with daily_seasonality=True to override this.
+2018-11-26 14:40:11,084 - forecaster.py - parse_seasonality_args - Disabling weekly seasonality. Run prophet with weekly_seasonality=True to override this.
+2018-11-26 14:40:11,084 - forecaster.py - parse_seasonality_args - Disabling daily seasonality. Run prophet with daily_seasonality=True to override this.
+2018-11-26 14:40:12,433 - bstsModel.py - trainBSTS - Rows in this output data: 690
+2018-11-26 14:40:13,786 - arimaModel.py - predictArima - Rows in this output data: 164
+2018-11-26 14:40:14,574 - etsModel.py - predictETS - Rows in this output data: 410
+2018-11-26 14:40:14,609 - forecaster.py - parse_seasonality_args - Disabling weekly seasonality. Run prophet with weekly_seasonality=True to override this.
+2018-11-26 14:40:14,609 - forecaster.py - parse_seasonality_args - Disabling daily seasonality. Run prophet with daily_seasonality=True to override this.
+2018-11-26 14:40:15,998 - forecaster.py - parse_seasonality_args - Disabling weekly seasonality. Run prophet with weekly_seasonality=True to override this.
+2018-11-26 14:40:15,998 - forecaster.py - parse_seasonality_args - Disabling daily seasonality. Run prophet with daily_seasonality=True to override this.
+2018-11-26 14:40:17,410 - forecaster.py - parse_seasonality_args - Disabling weekly seasonality. Run prophet with weekly_seasonality=True to override this.
+2018-11-26 14:40:17,410 - forecaster.py - parse_seasonality_args - Disabling daily seasonality. Run prophet with daily_seasonality=True to override this.
+2018-11-26 14:40:18,869 - bstsModel.py - predictBSTS - Rows in this output data: 246
+2018-11-26 14:40:18,869 - main.py - <module> - Application completed
+2018-11-26 14:47:57,467 - main.py - <module> - New application start
+2018-11-26 14:47:57,479 - main.py - <module> - Rows in the input data source: 690
+2018-11-26 14:48:05,973 - arimaModel.py - trainArima - Rows in this output data: 690
+2018-11-26 14:48:08,572 - etsModel.py - trainETS - Rows in this output data: 690
+2018-11-26 14:48:08,621 - forecaster.py - parse_seasonality_args - Disabling weekly seasonality. Run prophet with weekly_seasonality=True to override this.
+2018-11-26 14:48:08,621 - forecaster.py - parse_seasonality_args - Disabling daily seasonality. Run prophet with daily_seasonality=True to override this.
+2018-11-26 14:48:09,983 - forecaster.py - parse_seasonality_args - Disabling weekly seasonality. Run prophet with weekly_seasonality=True to override this.
+2018-11-26 14:48:09,983 - forecaster.py - parse_seasonality_args - Disabling daily seasonality. Run prophet with daily_seasonality=True to override this.
+2018-11-26 14:48:11,354 - forecaster.py - parse_seasonality_args - Disabling weekly seasonality. Run prophet with weekly_seasonality=True to override this.
+2018-11-26 14:48:11,354 - forecaster.py - parse_seasonality_args - Disabling daily seasonality. Run prophet with daily_seasonality=True to override this.
+2018-11-26 14:48:12,746 - forecaster.py - parse_seasonality_args - Disabling weekly seasonality. Run prophet with weekly_seasonality=True to override this.
+2018-11-26 14:48:12,746 - forecaster.py - parse_seasonality_args - Disabling daily seasonality. Run prophet with daily_seasonality=True to override this.
+2018-11-26 14:48:14,107 - forecaster.py - parse_seasonality_args - Disabling weekly seasonality. Run prophet with weekly_seasonality=True to override this.
+2018-11-26 14:48:14,107 - forecaster.py - parse_seasonality_args - Disabling daily seasonality. Run prophet with daily_seasonality=True to override this.
+2018-11-26 14:48:15,472 - forecaster.py - parse_seasonality_args - Disabling weekly seasonality. Run prophet with weekly_seasonality=True to override this.
+2018-11-26 14:48:15,472 - forecaster.py - parse_seasonality_args - Disabling daily seasonality. Run prophet with daily_seasonality=True to override this.
+2018-11-26 14:48:16,873 - forecaster.py - parse_seasonality_args - Disabling weekly seasonality. Run prophet with weekly_seasonality=True to override this.
+2018-11-26 14:48:16,874 - forecaster.py - parse_seasonality_args - Disabling daily seasonality. Run prophet with daily_seasonality=True to override this.
+2018-11-26 14:48:18,250 - forecaster.py - parse_seasonality_args - Disabling weekly seasonality. Run prophet with weekly_seasonality=True to override this.
+2018-11-26 14:48:18,250 - forecaster.py - parse_seasonality_args - Disabling daily seasonality. Run prophet with daily_seasonality=True to override this.
+2018-11-26 14:48:19,697 - forecaster.py - parse_seasonality_args - Disabling weekly seasonality. Run prophet with weekly_seasonality=True to override this.
+2018-11-26 14:48:19,697 - forecaster.py - parse_seasonality_args - Disabling daily seasonality. Run prophet with daily_seasonality=True to override this.
+2018-11-26 14:48:21,073 - forecaster.py - parse_seasonality_args - Disabling weekly seasonality. Run prophet with weekly_seasonality=True to override this.
+2018-11-26 14:48:21,073 - forecaster.py - parse_seasonality_args - Disabling daily seasonality. Run prophet with daily_seasonality=True to override this.
+2018-11-26 14:48:22,438 - bstsModel.py - trainBSTS - Rows in this output data: 690
+2018-11-26 14:48:23,829 - arimaModel.py - predictArima - Rows in this output data: 164
+2018-11-26 14:48:24,601 - etsModel.py - predictETS - Rows in this output data: 410
+2018-11-26 14:48:24,637 - forecaster.py - parse_seasonality_args - Disabling weekly seasonality. Run prophet with weekly_seasonality=True to override this.
+2018-11-26 14:48:24,638 - forecaster.py - parse_seasonality_args - Disabling daily seasonality. Run prophet with daily_seasonality=True to override this.
+2018-11-26 14:48:26,015 - forecaster.py - parse_seasonality_args - Disabling weekly seasonality. Run prophet with weekly_seasonality=True to override this.
+2018-11-26 14:48:26,015 - forecaster.py - parse_seasonality_args - Disabling daily seasonality. Run prophet with daily_seasonality=True to override this.
+2018-11-26 14:48:27,415 - forecaster.py - parse_seasonality_args - Disabling weekly seasonality. Run prophet with weekly_seasonality=True to override this.
+2018-11-26 14:48:27,416 - forecaster.py - parse_seasonality_args - Disabling daily seasonality. Run prophet with daily_seasonality=True to override this.
+2018-11-26 14:48:28,842 - bstsModel.py - predictBSTS - Rows in this output data: 246
+2018-11-26 14:48:28,843 - main.py - <module> - Application completed
